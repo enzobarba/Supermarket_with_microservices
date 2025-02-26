@@ -1,4 +1,4 @@
-package com.labISD.demo;
+package com.labISD.demo.domain;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.Email;
