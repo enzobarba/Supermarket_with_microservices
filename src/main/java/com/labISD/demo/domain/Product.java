@@ -33,4 +33,19 @@ public class Product {
 
     @NotNull @Getter @Setter @Min(0) @Max(5)
     private float rating;
+
+    protected Product(){}
+
+    public Product(String name, float price, int quantity, float weight, float rating){
+        this.name = name;
+        this.price = price;
+        this.quantity = quantity;
+        this.weight = weight;
+        this.rating = rating;
+    }
+
+    @Override
+    public String toString(){
+        return "Id: "+id+", Name: "+name+", Price: "+price+", Quantity: "+quantity+", Weight: "+weight+", Rating: "+rating;
+    }
 }

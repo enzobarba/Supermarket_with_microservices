@@ -16,7 +16,7 @@ enum ROLE{
 }
 
 @Entity
-public class User {
+public class Users {
     
     @Id @GeneratedValue(strategy = GenerationType.AUTO) @Getter
     private Long id;
@@ -45,4 +45,21 @@ public class User {
     @Min(0) @Getter @Setter
     private float money;
 
+    protected Users(){}
+
+    public Users(String username, String hashedPassword, String salt, String email, String name, String surname, ROLE role, float money){
+        this.username = username;
+        this.hashedPassword = hashedPassword;
+        this.salt = salt;
+        this.email = email;
+        this.name = name;
+        this.surname = surname;
+        this.role = role;
+        this.money = money;
+    }
+
+    @Override
+    public String toString(){
+        return "Username: "+username+", hashedPassword: "+hashedPassword+", Salt: "+salt+", email: "+email+", name: "+name+", surname: "+surname+", role: "+role+", money: "+money;
+    }
 }
