@@ -32,6 +32,6 @@ public class Profile {
 
     @Override
     public String toString(){
-        return "Name: "+name+", Surname: "+surname+", money: "+money;
+        return "Name: " + name + ", Surname: " + surname + ", money: " + money;
     }
 }

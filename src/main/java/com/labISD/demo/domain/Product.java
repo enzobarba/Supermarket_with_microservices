@@ -1,5 +1,6 @@
 package com.labISD.demo.domain;
 
+import java.util.UUID;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -13,8 +14,8 @@ import lombok.Setter;
 @Entity
 public class Product {
     
-    @Id @GeneratedValue(strategy = GenerationType.AUTO) @Getter
-    private Long id;
+    @Id @GeneratedValue(strategy = GenerationType.UUID) @Getter
+    private UUID id;
 
     @NotNull @Getter @Setter
     private String name;
@@ -46,6 +47,6 @@ public class Product {
 
     @Override
     public String toString(){
-        return "Id: "+id+", Name: "+name+", Price: "+price+", Quantity: "+quantity+", Weight: "+weight+", Rating: "+rating;
+        return "Id: " + id + ", Name: " + name + ", Price: " +price + ", Quantity: " + quantity + ", Weight: " + weight + ", Rating: " + rating;
     }
 }

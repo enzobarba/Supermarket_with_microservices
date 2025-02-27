@@ -48,6 +48,6 @@ public class Account {
 
     @Override
     public String toString(){
-        return "Username: "+username+", hashedPassword: "+hashedPassword+", Salt: "+salt+", Email: "+email+", Role: "+role;
+        return "Username: " + username + ", hashedPassword: " + hashedPassword + ", Salt: " + salt + ", Email: " + email + ", Role: " + role;
     }
 }

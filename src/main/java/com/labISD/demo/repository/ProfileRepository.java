@@ -1,9 +1,10 @@
 package com.labISD.demo.repository;
 
 import org.springframework.data.repository.CrudRepository;
-import com.labISD.demo.domain.Product;
 import java.util.UUID;
+import com.labISD.demo.domain.Profile;
 
-public interface ProductRepository extends CrudRepository <Product, UUID>{
+
+public interface ProfileRepository extends CrudRepository <Profile, UUID> {
     
 }
