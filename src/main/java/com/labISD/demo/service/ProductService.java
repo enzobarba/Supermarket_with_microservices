@@ -8,7 +8,10 @@ import java.util.List;
 import java.util.UUID;
 import org.springframework.data.domain.Sort;
 import java.util.stream.Collectors;
+import java.util.Optional;
+import org.springframework.stereotype.Service;
 
+@Service
 public class ProductService {
     
     @Autowired
@@ -32,7 +35,7 @@ public class ProductService {
 
     public List <Product> findProductsByAvialable(boolean avialable){
         return productRepository.findAll().stream()
-        .filter(product ->product.getAvialable() == true)
+        .filter(product ->product.isAvialable() == true)
         .collect(Collectors.toList());            
     }
 
@@ -58,6 +61,27 @@ public class ProductService {
 
     public List <Product> getSortedProductsByPriceDesc(){
         return productRepository.findAll(Sort.by(Sort.Order.desc("price")));
+    }
+
+    public void supplyProduct(UUID id, int quantity){
+        Optional <Product> product = productRepository.findById(id);
+        product.ifPresent(p -> {p.setQuantity(p.getQuantity() + quantity);
+                        productRepository.save(p);
+        });
+    }
+
+    public void buyProduct(UUID id, int quantity){
+        Optional <Product> product = productRepository.findById(id);
+        product.ifPresent(p -> {p.setQuantity(p.getQuantity() - quantity);
+                        productRepository.save(p);
+        });
+    }
+
+    public void rateProduct(UUID id, int rating){
+        Optional <Product> product = productRepository.findById(id);
+        product.ifPresent(p -> {p.addRating(rating);
+                        productRepository.save(p);
+        });
     }
 
 }

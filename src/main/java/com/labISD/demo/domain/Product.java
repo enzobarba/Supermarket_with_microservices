@@ -55,15 +55,15 @@ public class Product {
 
     @Override
     public String toString(){
-        return "Id: " + id +", Category: " + category + ", Name: " + name + ", Price: " +price + ", Quantity: " + quantity + ", Weight (KG): " + weight + ", Rating: " + rating;
+        return "Id: " + id + ", Category: " + category + ", Name: " + name + ", Price: " +price + ", Quantity: " + quantity + ", Weight (KG): " + weight + ", Rating: " + rating;
     }
 
-    public void addRating(float rating){
+    public void addRating(int rating){
         quantityRatings++;
         this.rating = this.rating + (rating - this.rating)/quantityRatings;
     }
 
-    public boolean getAvialable(){
+    public boolean isAvialable(){
         if(quantity == 0){
             return false;
         }
