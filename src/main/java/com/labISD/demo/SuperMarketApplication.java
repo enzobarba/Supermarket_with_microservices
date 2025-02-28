@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.ArrayList;
-
 import com.labISD.demo.domain.Product;
 import com.labISD.demo.repository.ProductRepository;
+import com.labISD.demo.enums.CATEGORY;
 
 @SpringBootApplication
 @RestController
@@ -24,7 +24,7 @@ public class SuperMarketApplication {
 
 	@GetMapping("/addProduct")
 	public void addProduct(){
-		repository.save(new Product("Petto di pollo", 3.2f, 20, 0.540f));
+		repository.save(new Product("Petto di pollo", 3.2f, 20, 0.540f,CATEGORY.Meat));
 	}
 
 	@GetMapping("/getProduct")

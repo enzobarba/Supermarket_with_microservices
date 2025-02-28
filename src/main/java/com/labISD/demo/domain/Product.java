@@ -46,7 +46,7 @@ public class Product {
 
     protected Product(){}
 
-    public Product(String name, float price, int quantity, float weight){
+    public Product(String name, float price, int quantity, float weight, CATEGORY category){
         this.name = name;
         this.price = price;
         this.quantity = quantity;
@@ -59,11 +59,12 @@ public class Product {
         this.weight = weight;
         this.rating = 0;
         this.quantityRatings = 0;
+        this.category = category;
     }
 
     @Override
     public String toString(){
-        return "Id: " + id + ", Name: " + name + ", Price: " +price + ", Quantity: " + quantity + ", Weight: " + weight + ", Rating: " + rating;
+        return "Id: " + id +", Category: " + category + ", Name: " + name + ", Price: " +price + ", Quantity: " + quantity + ", Weight (KG): " + weight + ", Rating: " + rating;
     }
 
     public int addRating(float rating){
