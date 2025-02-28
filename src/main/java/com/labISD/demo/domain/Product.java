@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,36 +18,65 @@ public class Product {
     @Id @GeneratedValue(strategy = GenerationType.UUID) @Getter
     private UUID id;
 
-    @NotNull @Getter @Setter
+    @NotNull @Getter @Setter @Size(min = 2, max = 20)
     private String name;
 
-    @NotNull @Getter @Setter
+    @NotNull @Getter @Setter @Min(0)
     private float price;
 
-    @NotNull @Getter @Setter
+    @NotNull @Getter @Setter @Min(0)
     private int quantity;
 
-    @NotNull @Getter @Setter
+    @NotNull @Getter
     private boolean avialable;
 
-    @NotNull @Getter @Setter
+    @NotNull @Getter @Setter @Min(0)
     private float weight;
 
     @NotNull @Getter @Setter @Min(0) @Max(5)
     private float rating;
 
+    @NotNull @Getter @Setter @Min(0)
+    private int quantityRatings;
+
     protected Product(){}
 
-    public Product(String name, float price, int quantity, float weight, float rating){
+    public Product(String name, float price, int quantity, float weight){
         this.name = name;
         this.price = price;
         this.quantity = quantity;
+        if(quantity > 0){
+            avialable = true;
+        }
+        else{
+            avialable = false;
+        }
         this.weight = weight;
-        this.rating = rating;
+        this.rating = 0;
+        this.quantityRatings = 0;
     }
 
     @Override
     public String toString(){
         return "Id: " + id + ", Name: " + name + ", Price: " +price + ", Quantity: " + quantity + ", Weight: " + weight + ", Rating: " + rating;
     }
+
+    public int addRating(float rating){
+        if(rating < 0 || rating > 5){
+            return -1;
+        }
+        quantityRatings++;
+        this.rating = this.rating + (rating - this.rating)/quantityRatings;
+        return 0;
+    }
+
+    public void setAvialable(){
+        if(quantity > 0){
+            avialable = true;
+        }
+        else{
+            avialable = false;
+        }
+    }
+
 }

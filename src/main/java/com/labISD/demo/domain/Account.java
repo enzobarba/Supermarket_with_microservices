@@ -4,9 +4,8 @@ import java.util.UUID;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,7 +20,7 @@ public class Account {
     @Id @Getter @Setter
     private UUID id;
 
-    @NotNull @Min(5) @Max(15) @Getter @Setter
+    @NotNull @Size(min = 2, max = 20) @Getter @Setter
     private String username;
 
     @NotNull @Getter @Setter

@@ -24,7 +24,7 @@ public class SuperMarketApplication {
 
 	@GetMapping("/addProduct")
 	public void addProduct(){
-		repository.save(new Product("Petto di pollo", 3.2f, 20, 0.540f, 3));
+		repository.save(new Product("Petto di pollo", 3.2f, 20, 0.540f));
 	}
 
 	@GetMapping("/getProduct")
