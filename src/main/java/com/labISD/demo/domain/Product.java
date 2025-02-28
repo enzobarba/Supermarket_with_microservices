@@ -1,6 +1,7 @@
 package com.labISD.demo.domain;
 
 import java.util.UUID;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -11,14 +12,15 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import com.labISD.demo.enums.CATEGORY;
 
 @Entity
 public class Product {
     
     @Id @GeneratedValue(strategy = GenerationType.UUID) @Getter
     private UUID id;
-
-    @NotNull @Getter @Setter @Size(min = 2, max = 20)
+ 
+    @NotNull @Getter @Setter @Size(min = 2, max = 20) @Column(unique = true)
     private String name;
 
     @NotNull @Getter @Setter @Min(0)
@@ -38,6 +40,9 @@ public class Product {
 
     @NotNull @Getter @Setter @Min(0)
     private int quantityRatings;
+
+    @NotNull @Getter @Setter 
+    private CATEGORY category;
 
     protected Product(){}
 

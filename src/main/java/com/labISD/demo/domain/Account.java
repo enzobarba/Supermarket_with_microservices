@@ -1,6 +1,7 @@
 package com.labISD.demo.domain;
-import java.util.UUID;
 
+import java.util.UUID;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.Email;
@@ -8,11 +9,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
-
-enum ROLE{
-    purchaser,
-    supplyer
-}
+import com.labISD.demo.enums.ROLE;
 
 @Entity
 public class Account {
@@ -20,7 +17,7 @@ public class Account {
     @Id @Getter @Setter
     private UUID id;
 
-    @NotNull @Size(min = 2, max = 20) @Getter @Setter
+    @NotNull @Size(min = 2, max = 20) @Getter @Setter @Column(unique = true)
     private String username;
 
     @NotNull @Getter @Setter
@@ -29,7 +26,7 @@ public class Account {
     @NotNull @Getter @Setter
     private String salt;
 
-    @Email @Getter @Setter
+    @Email @Getter @Setter @Column(unique = true)
     private String email;
 
     @NotNull @Getter @Setter
