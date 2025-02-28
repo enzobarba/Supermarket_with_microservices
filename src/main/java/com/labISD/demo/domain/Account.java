@@ -14,27 +14,29 @@ import com.labISD.demo.enums.ROLE;
 @Entity
 public class Account {
     
-    @Id @Getter @Setter
+    @Id @Getter @Setter @NotNull(message = "id cannot be null")
     private UUID id;
 
-    @NotNull @Size(min = 2, max = 20) @Getter @Setter @Column(unique = true)
+    @NotNull(message = "username cannot be null") @Getter @Setter @Column(unique = true)
+    @Size(min = 2, max = 20, message = "length of username must be 2-20") 
     private String username;
 
-    @NotNull @Getter @Setter
+    @NotNull(message = "hashedPassword cannot be null") @Getter @Setter
     private String hashedPassword;
 
-    @NotNull @Getter @Setter
+    @NotNull(message = "salt cannot be null") @Getter @Setter
     private String salt;
 
-    @Email @Getter @Setter @Column(unique = true)
+    @Email (message = "must be email format [name@domain.com]")
+    @Getter @Setter @Column(unique = true) @NotNull(message = "email cannot be null")
     private String email;
 
-    @NotNull @Getter @Setter
+    @NotNull(message = "role cannot be null") @Getter @Setter
     private ROLE role;
 
     protected Account(){}
 
-    public Account(String username, String hashedPassword, String salt, String email, String name, String surname, ROLE role, float money){
+    public Account(String username, String hashedPassword, String salt, String email, ROLE role){
         this.username = username;
         this.hashedPassword = hashedPassword;
         this.salt = salt;
@@ -44,6 +46,6 @@ public class Account {
 
     @Override
     public String toString(){
-        return "Username: " + username + ", hashedPassword: " + hashedPassword + ", Salt: " + salt + ", Email: " + email + ", Role: " + role;
+        return String.format("Username: %s, HashedPassword: %s, Salt: %s, Email: %s, Role: %s", username, hashedPassword, salt, email, role);
     }
 }

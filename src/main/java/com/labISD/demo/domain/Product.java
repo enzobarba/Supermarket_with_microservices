@@ -19,26 +19,41 @@ public class Product {
     
     @Id @GeneratedValue(strategy = GenerationType.UUID) @Getter
     private UUID id;
- 
-    @NotNull @Getter @Setter @Size(min = 2, max = 20) @Column(unique = true)
+  
+    @NotNull(message = "name cannot be null")
+    @Getter @Setter
+    @Size(min = 2, max = 20, message = "length of name must be 2-20") 
+    @Column(unique = true)
     private String name;
 
-    @NotNull @Getter @Setter @Min(0)
+    @NotNull(message = "price cannot be null")
+    @Getter @Setter 
+    @Min(value = 0, message = "price must be greater than or equal to 0") 
     private float price;
 
-    @NotNull @Getter @Setter @Min(0)
+    @NotNull(message = "quantity cannot be null")
+    @Getter @Setter 
+    @Min(value = 0, message = "quantity must be greater than or equal to 0") 
     private int quantity;
 
-    @NotNull @Getter @Setter @Min(0)
+    @NotNull(message = "weight cannot be null")
+    @Getter @Setter 
+    @Min(value = 0, message = "weight must be greater than or equal to 0") 
     private float weight;
 
-    @NotNull @Getter @Setter @Min(0) @Max(5)
+    @NotNull(message = "rating cannot be null")
+    @Getter @Setter 
+    @Min(value = 0, message = "rating must be greater than or equal to 0")
+    @Max(value = 5, message = "rating must be less than or equal to 5") 
     private float rating;
 
-    @NotNull @Getter @Setter @Min(0)
+    @NotNull(message = "quantityRatings cannot be null") 
+    @Getter @Setter 
+    @Min(value = 0, message = "quantityRatings must be greater than or equal to 0") 
     private int quantityRatings;
 
-    @NotNull @Getter @Setter 
+    @NotNull(message = "category cannot be null")
+    @Getter @Setter 
     private CATEGORY category;
 
     protected Product(){}
@@ -55,7 +70,7 @@ public class Product {
 
     @Override
     public String toString(){
-        return "Id: " + id + ", Category: " + category + ", Name: " + name + ", Price: " +price + ", Quantity: " + quantity + ", Weight (KG): " + weight + ", Rating: " + rating;
+        return String.format("Id: %s, Category: %s, Name: %s, Price: %.2f€, Quantity: %d, Weight: %.3f, Rating: %.2f", id, category, name, price, quantity, weight, rating);
     }
 
     public void addRating(int rating){

@@ -1,7 +1,6 @@
 package com.labISD.demo.domain;
 
 import java.util.UUID;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.Min;
@@ -13,16 +12,19 @@ import lombok.Setter;
 @Entity
 public class Profile {
     
-    @Id @Getter @Setter
+    @Id @NotNull(message = "id cannot be null") @Getter @Setter
     private UUID id;
 
-    @NotNull @Getter @Setter @Size(min = 2, max = 20)
+    @NotNull(message = "name cannot be null") @Getter @Setter
+    @Size(min = 2, max = 20, message = "length of name must be 2-20") 
     private String name;
 
-    @NotNull @Getter @Setter @Size(min = 2, max = 20)
+    @NotNull(message = "surname cannot be null") @Getter @Setter
+    @Size(min = 2, max = 20, message = "length of surname must be 2-20") 
     private String surname;
 
-    @NotNull @Getter @Setter @Min(0)
+    @NotNull(message = "money cannot be null") @Getter @Setter
+    @Min(value = 0, message = "money must be greater than or equal to 0")
     private float money;
 
     protected Profile(){}
@@ -35,6 +37,6 @@ public class Profile {
 
     @Override
     public String toString(){
-        return "Name: " + name + ", Surname: " + surname + ", money: " + money;
+        return String.format("Name: %s, Surname: %s, Money: %.2f", name, surname, money);
     }
 }
