@@ -16,7 +16,7 @@ import com.labISD.demo.enums.CATEGORY;
 public class SuperMarketApplication {
 
 	@Autowired
-	private ProductRepository repository;
+	private ProductRepository productRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(SuperMarketApplication.class, args);
@@ -24,13 +24,13 @@ public class SuperMarketApplication {
 
 	@GetMapping("/addProduct")
 	public void addProduct(){
-		repository.save(new Product("Petto di pollo", 3.2f, 20, 0.540f,CATEGORY.Meat));
+		productRepository.save(new Product("Petto di pollo", 3.2f, 20, 0.540f,CATEGORY.Meat));
 	}
 
 	@GetMapping("/getProduct")
 	public String findProduct(){
 		List <Product> products = new ArrayList<>();
-		repository.findAll().forEach(products::add);
+		productRepository.findAll().forEach(products::add);
 		return "Products found: " + products.toString();
 	}
 }

@@ -29,9 +29,6 @@ public class Product {
     @NotNull @Getter @Setter @Min(0)
     private int quantity;
 
-    @NotNull @Getter
-    private boolean avialable;
-
     @NotNull @Getter @Setter @Min(0)
     private float weight;
 
@@ -50,12 +47,6 @@ public class Product {
         this.name = name;
         this.price = price;
         this.quantity = quantity;
-        if(quantity > 0){
-            avialable = true;
-        }
-        else{
-            avialable = false;
-        }
         this.weight = weight;
         this.rating = 0;
         this.quantityRatings = 0;
@@ -67,22 +58,15 @@ public class Product {
         return "Id: " + id +", Category: " + category + ", Name: " + name + ", Price: " +price + ", Quantity: " + quantity + ", Weight (KG): " + weight + ", Rating: " + rating;
     }
 
-    public int addRating(float rating){
-        if(rating < 0 || rating > 5){
-            return -1;
-        }
+    public void addRating(float rating){
         quantityRatings++;
         this.rating = this.rating + (rating - this.rating)/quantityRatings;
-        return 0;
     }
 
-    public void setAvialable(){
-        if(quantity > 0){
-            avialable = true;
+    public boolean getAvialable(){
+        if(quantity == 0){
+            return false;
         }
-        else{
-            avialable = false;
-        }
+        return true;
     }
-
 }
