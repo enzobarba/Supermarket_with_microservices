@@ -65,7 +65,7 @@ public class ProductService {
 
     public void supplyProduct(UUID id, int quantity){
         Optional <Product> product = productRepository.findById(id);
-        product.ifPresent(p -> {p.setQuantity(p.getQuantity() + quantity);
+        product.ifPresent(p -> {p.supply(quantity);
                         productRepository.save(p);
         });
     }
@@ -74,8 +74,8 @@ public class ProductService {
         Optional<Product> product = productRepository.findById(id);
         if (product.isPresent()) {
             Product p = product.get();
-            if (p.getQuantity() >= quantity) {
-                p.setQuantity(p.getQuantity() - quantity);
+            if (p.quantityAvailable(quantity)) {
+                p.buy(quantity);
                 productRepository.save(p);
             }
         }

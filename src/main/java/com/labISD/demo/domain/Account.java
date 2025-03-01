@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
+import jakarta.validation.constraints.Pattern;  
 import lombok.Setter;
 import com.labISD.demo.enums.ROLE;
 
@@ -18,7 +19,8 @@ public class Account {
     private UUID id;
 
     @NotNull(message = "username cannot be null") @Getter @Setter @Column(unique = true)
-    @Size(min = 2, max = 20, message = "length of username must be 2-20") 
+    @Size(min = 3, max = 30, message = "length of username must be 3-30") 
+    @Pattern(regexp = "^[a-zA-Z0-9_-]{3,30}$", message = "username can only contain letters, numbers, hyphens, and underscores")
     private String username;
 
     @NotNull(message = "hashedPassword cannot be null") @Getter @Setter

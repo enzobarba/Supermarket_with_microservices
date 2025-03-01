@@ -78,10 +78,25 @@ public class Product {
         this.rating = this.rating + (rating - this.rating)/quantityRatings;
     }
 
+    public boolean quantityAvailable(int quantity){
+        if(quantity <= this.quantity){
+            return true;
+        }
+        return false;
+    }
+
     public boolean isAvailable(){
-        if(quantity == 0){
+        if(this.quantity == 0){
             return false;
         }
-        return true;
+        return true;     
+    }
+
+    public void supply(int quantity){
+        this.quantity+= quantity;
+    }
+
+    public void buy(int quantity){
+        this.quantity-= quantity;
     }
 }

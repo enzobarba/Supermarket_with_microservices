@@ -16,11 +16,11 @@ public class Profile {
     private UUID id;
 
     @NotNull(message = "name cannot be null") @Getter @Setter
-    @Size(min = 2, max = 20, message = "length of name must be 2-20") 
+    @Size(min = 1, max = 50, message = "length of name must be 1-50") 
     private String name;
 
     @NotNull(message = "surname cannot be null") @Getter @Setter
-    @Size(min = 2, max = 20, message = "length of surname must be 2-20") 
+    @Size(min = 1, max = 50, message = "length of surname must be 1-50") 
     private String surname;
 
     @Getter @Setter
@@ -29,14 +29,31 @@ public class Profile {
 
     protected Profile(){}
 
-    public Profile(String name, String surname, float money){
+    public Profile(UUID id, String name, String surname, float money){
+        this.id = id;
         this.name = name;
         this.surname = surname;
         this.money = money;
+        //TO DO: ADD ADDRESS, HOUSENUMBER, CITY (AFTER CHAIN CLIENT-SERVER AND REQUEST)
     }
 
     @Override
     public String toString(){
         return String.format("Name: %s, Surname: %s, Money: %.2f", name, surname, money);
+    }
+
+    public boolean canSpend(float amount){
+        if(this.money >= amount){
+            return true;
+        }
+        return false;
+    }
+
+    public void addMoney(int amount){
+        this.money+= amount;
+    }
+
+    public void spendMoney(int amount){
+        this.money-= amount;
     }
 }
