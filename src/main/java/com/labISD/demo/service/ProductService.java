@@ -33,9 +33,9 @@ public class ProductService {
         return productRepository.findByName(name);
     }
 
-    public List <Product> findProductsByAvialable(boolean avialable){
+    public List <Product> findProductsByAvailable(boolean available){
         return productRepository.findAll().stream()
-        .filter(product ->product.isAvialable() == true)
+        .filter(product ->product.isAvailable() == true)
         .collect(Collectors.toList());            
     }
 
@@ -71,10 +71,14 @@ public class ProductService {
     }
 
     public void buyProduct(UUID id, int quantity){
-        Optional <Product> product = productRepository.findById(id);
-        product.ifPresent(p -> {p.setQuantity(p.getQuantity() - quantity);
-                        productRepository.save(p);
-        });
+        Optional<Product> product = productRepository.findById(id);
+        if (product.isPresent()) {
+            Product p = product.get();
+            if (p.getQuantity() >= quantity) {
+                p.setQuantity(p.getQuantity() - quantity);
+                productRepository.save(p);
+            }
+        }
     }
 
     public void rateProduct(UUID id, int rating){
@@ -83,5 +87,5 @@ public class ProductService {
                         productRepository.save(p);
         });
     }
-
+    
 }

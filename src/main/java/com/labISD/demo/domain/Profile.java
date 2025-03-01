@@ -23,7 +23,7 @@ public class Profile {
     @Size(min = 2, max = 20, message = "length of surname must be 2-20") 
     private String surname;
 
-    @NotNull(message = "money cannot be null") @Getter @Setter
+    @Getter @Setter
     @Min(value = 0, message = "money must be greater than or equal to 0")
     private float money;
 

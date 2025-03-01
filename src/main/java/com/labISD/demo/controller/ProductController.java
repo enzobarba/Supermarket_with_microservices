@@ -22,7 +22,6 @@ public class ProductController {
 		productService.addProduct(new Product("Pettodipollo", 2, 10, 2, CATEGORY.Meat));
 		productService.addProduct(new Product("Pettoditacchino", 3, 10, 2, CATEGORY.Meat));
 		productService.addProduct(new Product("spaghetti", 1.50f, 30, 1, CATEGORY.Pasta));
-
 	}
 
 	@GetMapping("/getProduct")

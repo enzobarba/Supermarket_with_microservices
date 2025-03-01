@@ -78,7 +78,7 @@ public class Product {
         this.rating = this.rating + (rating - this.rating)/quantityRatings;
     }
 
-    public boolean isAvialable(){
+    public boolean isAvailable(){
         if(quantity == 0){
             return false;
         }
