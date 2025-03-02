@@ -31,17 +31,4 @@ public class ProfileService {
         return profile.get();
     }
 
-    public void addMoneyToProfile(int amount, UUID id){
-        Optional <Profile> profile = profileRepository.findById(id);
-        profile.ifPresent(p -> {
-            p.addMoney(amount);
-        });
-    }
-
-    public void spendMoneyForProfile(int amount, UUID id){
-        Optional <Profile> profile = profileRepository.findById(id);
-        profile.ifPresent(p -> {
-            p.spendMoney(amount);
-        });
-    }
 }
