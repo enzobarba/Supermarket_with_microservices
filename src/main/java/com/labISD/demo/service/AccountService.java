@@ -10,6 +10,7 @@ import com.labISD.demo.service.Authentication.Token;
 import com.lambdaworks.crypto.SCryptUtil;
 import com.labISD.demo.enums.ROLE;
 import java.util.UUID;
+import java.util.List;
 
 
 @Service
@@ -26,16 +27,16 @@ public class AccountService {
         this.tokenGenerator = tokenGenerator;
     }
 
-    public void registerUser(final String username, final String passwd, final String email, final String name, final String surname) {
-        registerUser(username, passwd, email, name, surname, null); 
+    public void registerAccount(final String username, final String passwd, final String email, final String name, final String surname) {
+        registerAccount(username, passwd, email, name, surname, null); 
     }
 
-    public void registerUser(final String username, final String passwd, final String email, final String name, final String surname, String inviteCode) {
+    public void registerAccount(final String username, final String passwd, final String email, final String name, final String surname, String inviteCode) {
         if (!username.matches("[a-zA-Z]{1}[a-zA-Z0-9]{2,29}"))
             throw new IllegalArgumentException();
         if (!passwd.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$"))
             throw new IllegalArgumentException();
-        if (accountRepository.findByUsername(username) == null)
+        if (accountRepository.findByUsername(username) != null)
             throw new IllegalArgumentException();
         final String hash = SCryptUtil.scrypt(passwd, 32768, 8, 1);
         UUID uuid = UUID.randomUUID();
@@ -59,7 +60,7 @@ public class AccountService {
         Account account = accountRepository.findByUsername(user);
         if (null == account)
             return null;
-        String authenticationInfo = account.getUsername();
+        String authenticationInfo = account.getHashedPassword();
         if (SCryptUtil.check(pwd, authenticationInfo)) {
             Token token = tokenGenerator.tokenBuild(user);
             tokenStore.store(token);
@@ -74,5 +75,9 @@ public class AccountService {
             validToken = true;
         }
         return validToken;
+    }
+
+    public List <Account> getAllAccounts(){
+        return accountRepository.findAll();
     }
 }

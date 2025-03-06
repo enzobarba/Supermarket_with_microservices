@@ -26,9 +26,7 @@ public class ProductController {
 
 	@GetMapping("/getProduct")
 	public String getProducts(){
-		List <Product> products = new ArrayList<>();
-		productService.findAllProducts().forEach(products::add);
-		return "Products found: " + products.toString();
+		return productService.getAllProducts().toString();
 	}
 
 	@GetMapping("/getSortedProduct")
