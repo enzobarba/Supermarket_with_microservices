@@ -1,1 +1,2 @@
+- aggiungere daemon di rimozione token quando scadono
 - in catena Client-Server ci vanno remote proxy e remote facade? Guardare codici prof

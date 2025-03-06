@@ -13,8 +13,8 @@ public class ProfileService {
     @Autowired
     private ProfileRepository profileRepository;
 
-    public void signIn(UUID id, String name, String surname, float money){
-        Profile profile = new Profile(id, name, surname, money);
+    public void signIn(UUID id, String name, String surname, String email){
+        Profile profile = new Profile(id, name, surname, email);
         profileRepository.save(profile);
     }
 
