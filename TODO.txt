@@ -1,2 +1,15 @@
-- aggiungere daemon di rimozione token quando scadono
+- implementare ServerGateway (vedere se mettere già RateLimiter) (prima di RBAC?)
 - in catena Client-Server ci vanno remote proxy e remote facade? Guardare codici prof
+- gestione pagamento con carte di credito
+- gestione acquisti concorrenti
+- DB per Service (controllare se va bene, dovrebbe)
+- RateLimiter in ApiGateway
+
+- logger di richieste al server
+- nascondere codice d'invito
+- Session state per carrello utenti non loggati 
+- Session state o caching (?) per evitare scritture/letture continue al DB durante formazione carrello (? per prestazioni)
+- aggiungere daemon di rimozione token quando scadono
+- aggiungere certificati e fare dialogare microservizi su https
+- Event Sourcing ???
+ 

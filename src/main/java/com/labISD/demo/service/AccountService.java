@@ -2,7 +2,9 @@ package com.labISD.demo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
 import com.labISD.demo.domain.Account;
+import com.labISD.demo.dto.ProfileRequest;
 import com.labISD.demo.repository.AccountRepository;
 import com.labISD.demo.service.Authentication.TokenGenerator;
 import com.labISD.demo.service.Authentication.TokenStore;
@@ -16,15 +18,17 @@ import java.util.List;
 @Service
 public class AccountService {
     
-   private final AccountRepository accountRepository;
+    private final AccountRepository accountRepository;
     private final TokenStore tokenStore;
     private final TokenGenerator tokenGenerator;
+    private WebClient.Builder webClientBuilder;
 
     @Autowired
-    public AccountService(AccountRepository accountRepository, TokenStore tokenStore, TokenGenerator tokenGenerator) {
+    public AccountService(AccountRepository accountRepository, TokenStore tokenStore, TokenGenerator tokenGenerator, WebClient.Builder webClientBuilder) {
         this.accountRepository = accountRepository;
         this.tokenStore = tokenStore;
         this.tokenGenerator = tokenGenerator;
+        this.webClientBuilder = webClientBuilder;
     }
 
     public void registerAccount(final String username, final String passwd, final String email, final String name, final String surname) {
@@ -41,7 +45,6 @@ public class AccountService {
         final String hash = SCryptUtil.scrypt(passwd, 32768, 8, 1);
         UUID uuid = UUID.randomUUID();
         ROLE role = null;
-        //fix clear invitation code
         if(inviteCode == null){
             role = ROLE.purchaser;
         }
@@ -53,7 +56,14 @@ public class AccountService {
         }
         Account newAccount = new Account(uuid, username, hash, role);
         accountRepository.save(newAccount);
-        //to do: add call api to profileService (createProfile)
+        createProfile(uuid, name, surname, email);     
+    }
+
+    public void createProfile(UUID uuid, String name, String surname, String email) {
+        webClientBuilder.build()
+            .post().uri("http://localhost:8080/createProfile")
+            .bodyValue(new ProfileRequest(uuid, name, surname, email))
+            .retrieve().toBodilessEntity().block(); 
     }
 
     public String logIn(String user, String pwd) {

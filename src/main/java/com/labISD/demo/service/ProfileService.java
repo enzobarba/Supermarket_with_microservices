@@ -1,13 +1,14 @@
 package com.labISD.demo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import com.labISD.demo.repository.ProfileRepository;
 import com.labISD.demo.domain.Profile;
 import java.util.Optional;
 import java.util.List;
 import java.util.UUID;
 
-
+@Service
 public class ProfileService {
     
     @Autowired
