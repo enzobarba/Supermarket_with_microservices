@@ -29,5 +29,11 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
+# Evita di committare file compilati
+*.class
+*.jar
+*.war
+*.ear
+
 ### VS Code ###
 .vscode/

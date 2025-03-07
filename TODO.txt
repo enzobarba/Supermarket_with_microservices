@@ -6,6 +6,7 @@
 - RateLimiter in ApiGateway
 
 - logger di richieste al server
+- passare da DB in memoria (H2) a DB su disco (MySQL ? )
 - nascondere codice d'invito
 - Session state per carrello utenti non loggati 
 - Session state o caching (?) per evitare scritture/letture continue al DB durante formazione carrello (? per prestazioni)
