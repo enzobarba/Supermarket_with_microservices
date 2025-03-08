@@ -11,10 +11,10 @@ server:
 
 app:
   service:
-    account: http://localhost:9090
-    profile: http://localhost:9091
-    product: http://localhost:9092
-    creditCard: http://localhost:9093
+    account: http://account:9090
+    profile: http://profile:9091
+    product: http://product:9092
+    creditCard: http://creditCard:9093
 
 
 zuul:

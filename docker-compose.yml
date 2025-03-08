@@ -1,0 +1,49 @@
+services:
+
+  apiGateway:
+    image: api-gateway:latest
+    restart: always
+    ports:
+      - 8080:8080
+    environment:
+      SERVER_PORT: 8080
+    networks:
+      - localnetwork
+
+  account:
+    image: account-service:latest
+    restart: always
+    environment:
+      SERVER_PORT: 9090
+    networks:
+      - localnetwork
+
+  profile:
+    image: profile-service:latest
+    restart: always
+    environment:
+      SERVER_PORT: 9091
+    networks:
+      - localnetwork
+
+  product:
+    image: product-service:latest
+    restart: always
+    environment:
+      SERVER_PORT: 9092
+    networks:
+      - localnetwork
+
+  creditCard:
+    image: credit-card-service:latest
+    restart: always
+    environment:
+      SERVER_PORT: 9093
+    networks:
+      - localnetwork
+
+networks:
+  localnetwork:
+    driver: bridge
+    
+    
