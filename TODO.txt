@@ -1,4 +1,5 @@
 - implementare ServerGateway (vedere se mettere già RateLimiter) (prima di RBAC?)
+- controlli chiamate, risposte ok/error, validated nei metodi opportuni (?)
 - in catena Client-Server ci vanno remote proxy e remote facade? Guardare codici prof
 - gestione pagamento con carte di credito
 - gestione acquisti concorrenti

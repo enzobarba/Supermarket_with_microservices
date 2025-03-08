@@ -1,0 +1,35 @@
+spring:
+
+  application:
+    name: ApiGateway
+
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+
+server:
+  port: 8080
+
+app:
+  service:
+    account: http://localhost:9090
+    profile: http://localhost:9091
+    product: http://localhost:9092
+    creditCard: http://localhost:9093
+
+
+zuul:
+  #prefix: /superMarket
+  routes:
+    account:
+      path: /account/**
+      url: ${app.service.account}
+    profile:
+      path: /profile/**
+      url: ${app.service.profile}
+    product:
+      path: /product/**
+      url: ${app.service.product}
+    creditCard:
+      path: /creditCard/**
+      url: ${app.service.creditCard}
+

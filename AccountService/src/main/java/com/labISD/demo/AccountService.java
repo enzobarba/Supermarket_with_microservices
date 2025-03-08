@@ -59,7 +59,7 @@ public class AccountService {
 
     public void createProfile(UUID uuid, String name, String surname, String email) {
         webClientBuilder.build()
-            .post().uri("http://localhost:8080/createProfile")
+            .post().uri("http://localhost:9091/createProfile")
             .bodyValue(new ProfileRequest(uuid, name, surname, email))
             .retrieve().toBodilessEntity().block(); 
     }
