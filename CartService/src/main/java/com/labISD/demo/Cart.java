@@ -41,7 +41,7 @@ public class Cart {
         return String.format("cartId: %s, userId: %s, items: %s", cartId, userId, items.toString());
     }
 
-    public void addItemToCart(UUID productId, int quantity){
+    public void addItemToCart(UUID productId, String name, int quantity){
         Optional<CartItem> existingItem = items.stream()
                 .filter(item -> item.getProductId().equals(productId))
                 .findFirst();
@@ -52,6 +52,7 @@ public class Cart {
             CartItem newItem = new CartItem();
             newItem.setCart(this);
             newItem.setProductId(productId);
+            newItem.setName(name);
             newItem.setQuantity(quantity);
             items.add(newItem);
         }

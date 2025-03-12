@@ -1,6 +1,7 @@
 package com.labISD.demo;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import com.labISD.demo.dto.ProductDTO;
 import com.labISD.demo.enums.CATEGORY;
 import java.util.List;
 import java.util.UUID;
@@ -14,6 +15,7 @@ public class ProductService {
     
     @Autowired
     private ProductRepository productRepository;
+
 
     public void addProduct(Product product){
         productRepository.save(product);
@@ -68,15 +70,14 @@ public class ProductService {
         });
     }
 
-    public void buyProduct(UUID id, int quantity){
-        Optional<Product> product = productRepository.findById(id);
+    public ProductDTO getNameQuantityProduct(UUID productId){
+        Optional<Product> product = productRepository.findById(productId);
         if (product.isPresent()) {
             Product p = product.get();
-            if (p.quantityAvailable(quantity)) {
-                p.buy(quantity);
-                productRepository.save(p);
-            }
+            return (new ProductDTO(p.getName(), p.getQuantity()));
         }
+        else
+            return null;
     }
 
     public void rateProduct(UUID id, int rating){

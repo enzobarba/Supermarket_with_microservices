@@ -28,17 +28,20 @@ public class CartItem {
     @Getter @Setter @NotNull(message = "quantity cannot be null") @Min(value = 1, message = "quantity must be greater than or equal to 1") 
     private int quantity;
 
-    //TO DO: ADD NAME OF PRODUCT
+    @Getter @Setter @NotNull(message = "name cannot be null") 
+    private String name;
+
 
     protected CartItem(){}
 
-    public CartItem(UUID productId, int quantity){
+    public CartItem(UUID productId, int quantity, String name){
         this.productId = productId;
         this.quantity = quantity;
+        this.name = name;
     }       
 
     @Override
     public String toString(){
-        return String.format("id: %s, productId: %s, quantity: %s", id, productId, quantity);
+        return String.format("id: %s, productId: %s, name: %s, quantity: %s", id, productId, name, quantity);
     }
 }

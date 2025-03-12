@@ -5,8 +5,12 @@ import java.util.List;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.labISD.demo.dto.ProductDTO;
 import com.labISD.demo.enums.CATEGORY;
 
 @RestController
@@ -34,9 +38,9 @@ public class ProductController {
 		return "Products found: " + products.toString();
 	}
 
-	@GetMapping("/buyProduct")
-	public void buyProduct(@RequestParam(value = "id") UUID id, @RequestParam(value = "q") int q){
-		productService.buyProduct(id, q);
+	@PostMapping("/getNameQuantityProduct")
+	public ProductDTO getNameQuantityProduct(@RequestBody UUID productId){
+		return productService.getNameQuantityProduct(productId);
 	}
 
 	@GetMapping("/supplyProduct")

@@ -46,7 +46,7 @@ public class AccountService {
         if(inviteCode == null){
             role = ROLE.purchaser;
         }
-        if(inviteCode == "ADMIN"){
+        else if(inviteCode == "ADMIN"){
             role = ROLE.admin;
         }
         else if(inviteCode == "SUPPLYER"){
@@ -55,12 +55,20 @@ public class AccountService {
         Account newAccount = new Account(uuid, username, hash, role);
         accountRepository.save(newAccount);
         createProfile(uuid, name, surname, email);     
+        createCart(uuid);
     }
 
-    private void createProfile(UUID uuid, String name, String surname, String email) {
+    private void createProfile(UUID userId, String name, String surname, String email) {
         webClientBuilder.build()
             .post().uri("http://profile:9091/createProfile")
-            .bodyValue(new ProfileRequest(uuid, name, surname, email))
+            .bodyValue(new ProfileRequest(userId, name, surname, email))
+            .retrieve().toBodilessEntity().block(); 
+    }
+
+    private void createCart(UUID userId) {
+        webClientBuilder.build()
+            .post().uri("http://cart:9094/createCart")
+            .bodyValue(userId)
             .retrieve().toBodilessEntity().block(); 
     }
 
