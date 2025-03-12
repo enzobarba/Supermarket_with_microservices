@@ -15,6 +15,7 @@ app:
     profile: http://profile:9091
     product: http://product:9092
     creditCard: http://creditCard:9093
+    cart: http://cart:9094
 
 
 zuul:
@@ -32,4 +33,8 @@ zuul:
     creditCard:
       path: /creditCard/**
       url: ${app.service.creditCard}
+    cart:
+      path: /cart/**
+      url: ${app.service.cart}
+    
 

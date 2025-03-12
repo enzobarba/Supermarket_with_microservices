@@ -57,7 +57,7 @@ public class AccountService {
         createProfile(uuid, name, surname, email);     
     }
 
-    public void createProfile(UUID uuid, String name, String surname, String email) {
+    private void createProfile(UUID uuid, String name, String surname, String email) {
         webClientBuilder.build()
             .post().uri("http://profile:9091/createProfile")
             .bodyValue(new ProfileRequest(uuid, name, surname, email))

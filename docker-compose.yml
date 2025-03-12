@@ -1,7 +1,7 @@
 services:
 
   apiGateway:
-    image: api-gateway:latest
+    image: apigateway:latest
     restart: always
     ports:
       - 8080:8080
@@ -35,10 +35,18 @@ services:
       - localnetwork
 
   creditCard:
-    image: credit-card-service:latest
+    image: creditcard-service:latest
     restart: always
     environment:
       SERVER_PORT: 9093
+    networks:
+      - localnetwork
+
+  cart:
+    image: cart-service:latest
+    restart: always
+    environment:
+      SERVER_PORT: 9094
     networks:
       - localnetwork
 

@@ -1,8 +1,11 @@
-- implementare ServerGateway (vedere se mettere già RateLimiter) (prima di RBAC?)
+- implementare ServerGateway (vedere se farlo manuale, o con zuul) e aggiungere chiamate tra microservizi (gestione pagamento con carte di credito)
+- vedere dove mettere authenticator, se mettere parte token in api gateway
+- catena Client-Server (interfaccia ui (thymeleaf+dto?))
 - controlli chiamate, risposte ok/error, validated nei metodi opportuni (?)
 - in catena Client-Server ci vanno remote proxy e remote facade? Guardare codici prof
-- gestione pagamento con carte di credito
-- gestione acquisti concorrenti
+- rbac
+- carrello e ordini services
+- gestione acquisti concorrenti (Transactional?)
 - DB per Service (controllare se va bene, dovrebbe)
 - RateLimiter in ApiGateway
 

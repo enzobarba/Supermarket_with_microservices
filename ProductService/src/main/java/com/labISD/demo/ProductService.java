@@ -33,7 +33,7 @@ public class ProductService {
 
     public List <Product> findProductsByAvailable(boolean available){
         return productRepository.findAll().stream()
-        .filter(product ->product.isAvailable() == true)
+        .filter(product ->product.isAvailable() == available)
         .collect(Collectors.toList());            
     }
 

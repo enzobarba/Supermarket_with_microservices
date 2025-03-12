@@ -21,7 +21,7 @@ public class ProfileService {
         profileRepository.deleteById(id);
     }
 
-    public List <Profile> getAllProfile(){
+    public List <Profile> getAllProfiles(){
         return profileRepository.findAll();
     }
 

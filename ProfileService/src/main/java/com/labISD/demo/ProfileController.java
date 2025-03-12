@@ -18,9 +18,9 @@ public class ProfileController {
         profileService.signIn(profileRequest.getUuid(), profileRequest.getName(), profileRequest.getSurname(), profileRequest.getEmail());
     }
 
-    @GetMapping("/getProfiles")
-    public String getProfiles(){
-        return profileService.getAllProfile().toString();
+    @GetMapping("/getAllProfiles")
+    public String getAllProfiles(){
+        return profileService.getAllProfiles().toString();
    }
     
 }

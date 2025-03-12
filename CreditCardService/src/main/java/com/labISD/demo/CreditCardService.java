@@ -18,16 +18,13 @@ public class CreditCardService {
         creditCardRepository.deleteById(cardId);
     }    
 
-    public boolean cardHasEnoughMoney(UUID cardId, float amount){
-        Optional <CreditCard> creditCard = creditCardRepository.findById(cardId);
-        return creditCard.get().canSpendMoney(amount);
-    }    
-
     public void spendMoneyFromCard(UUID cardId, float amount){
         Optional <CreditCard> creditCard = creditCardRepository.findById(cardId);
         creditCard.ifPresent(c -> {
-            c.spendMoney(amount);
-            creditCardRepository.save(c);
+            if(c.canSpendMoney(amount)){
+                c.spendMoney(amount);
+                creditCardRepository.save(c);
+            }
         });
     }
 

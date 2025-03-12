@@ -22,12 +22,12 @@ public class ProductController {
 		productService.addProduct(new Product("spaghetti", 1.50f, 30, 1, CATEGORY.Pasta));
 	}
 
-	@GetMapping("/getProduct")
-	public String getProducts(){
+	@GetMapping("/getAllProducts")
+	public String getAllProducts(){
 		return productService.getAllProducts().toString();
 	}
 
-	@GetMapping("/getSortedProduct")
+	@GetMapping("/getSortedProducts")
 	public String getSortedProducts(){
 		List <Product> products = new ArrayList<>();
 		productService.getSortedProductsByPriceAsc().forEach(products::add);

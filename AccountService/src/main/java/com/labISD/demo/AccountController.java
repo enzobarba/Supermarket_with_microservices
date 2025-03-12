@@ -16,8 +16,8 @@ public class AccountController {
         accountService.registerAccount("gino", "2709Gino*", "ginopollo@gmail.com", "Gino", "Pollo");
     }
 
-    @GetMapping("/getAccounts")
-    public String getAccounts(){
+    @GetMapping("/getAllAccounts")
+    public String getAllAccounts(){
         return accountService.getAllAccounts().toString();
     }
 
