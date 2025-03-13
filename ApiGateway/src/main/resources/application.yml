@@ -16,6 +16,7 @@ app:
     product: http://product:9092
     creditCard: http://creditCard:9093
     cart: http://cart:9094
+    order: http://order:9095
 
 
 zuul:
@@ -36,5 +37,8 @@ zuul:
     cart:
       path: /cart/**
       url: ${app.service.cart}
+    order:
+      path: /order/**
+      url: ${app.service.order}
     
 

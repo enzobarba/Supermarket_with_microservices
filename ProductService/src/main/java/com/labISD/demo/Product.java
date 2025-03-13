@@ -69,7 +69,7 @@ public class Product {
 
     @Override
     public String toString(){
-        return String.format("Id: %s, Category: %s, Name: %s, Price: %.2f€, Quantity: %d, Weight: %.3f, Rating: %.2f", id, category, name, price, quantity, weight, rating);
+        return String.format("Id: %s, Category: %s, Name: %s, Price: %.2f€, Quantity: %d, Weight: %.2f Kg, Rating: %.2f", id, category, name, price, quantity, weight, rating);
     }
 
     public void addRating(int rating){

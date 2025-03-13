@@ -13,6 +13,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import java.util.Optional;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
 
@@ -26,22 +27,27 @@ public class Cart {
     @Getter 
     private List <CartItem> items;  
 
-    @Getter @Setter @NotNull(message = "userId cannot be null") @Column(unique = true)  
+    @Getter @Setter @NotNull(message = "user id cannot be null") @Column(unique = true)  
     private UUID userId;
+
+    @Getter @Setter @NotNull(message = "user id cannot be null") @Min(value = 0, message = "total amount cannot be less than 0")
+    private float totalAmount;
+
 
     protected Cart(){}
 
     public Cart(UUID userId){
         items = new ArrayList<>();
         this.userId = userId;
+        totalAmount = 0;
     }
 
     @Override
     public String toString(){
-        return String.format("cartId: %s, userId: %s, items: %s", cartId, userId, items.toString());
+        return String.format("cartId: %s, userId: %s, items: %s, totalAmount: %.2f", cartId, userId, items.toString(), totalAmount);
     }
 
-    public void addItemToCart(UUID productId, String name, int quantity){
+    public void addItemToCart(UUID productId, String name, int quantity, float price){
         Optional<CartItem> existingItem = items.stream()
                 .filter(item -> item.getProductId().equals(productId))
                 .findFirst();
@@ -56,6 +62,7 @@ public class Cart {
             newItem.setQuantity(quantity);
             items.add(newItem);
         }
+        totalAmount+= quantity*price;
     }
 
     public void removeItem(UUID productId){
@@ -65,4 +72,5 @@ public class Cart {
     public void clear(){
         items.clear();
     }
+
 }

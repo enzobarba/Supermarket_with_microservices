@@ -1,4 +1,3 @@
-- chiamare aggiungiProdottoACarrello da cart, farsi dare nome e quantità disponibile da servizio product
 - servizio ordini
 - implementare ServerGateway (vedere se farlo manuale, o con zuul) e aggiungere chiamate tra microservizi (gestione pagamento con carte di credito)
 - vedere dove mettere authenticator, se mettere parte token in api gateway

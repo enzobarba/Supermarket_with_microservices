@@ -37,6 +37,11 @@ public class CartController {
     @GetMapping("/clearCart")
     public void clearCart(@RequestParam(value = "userId") UUID userId){
         cartService.clearCart(userId);
-    }   
+    }  
+    
+    @GetMapping("/checkout")
+    public String checkout(@RequestParam(value = "userId") UUID userId){
+        return cartService.checkout(userId);
+    }
 
 }

@@ -1,6 +1,8 @@
 package com.labISD.demo;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
+import com.labISD.demo.dto.ProductAvailableDTO;
 import com.labISD.demo.dto.ProductDTO;
 import com.labISD.demo.enums.CATEGORY;
 import java.util.List;
@@ -70,11 +72,11 @@ public class ProductService {
         });
     }
 
-    public ProductDTO getNameQuantityProduct(UUID productId){
+    public ProductDTO getProductDTO(UUID productId){
         Optional<Product> product = productRepository.findById(productId);
         if (product.isPresent()) {
             Product p = product.get();
-            return (new ProductDTO(p.getName(), p.getQuantity()));
+            return (new ProductDTO(p.getName(), p.getQuantity(), p.getPrice()));
         }
         else
             return null;
@@ -84,6 +86,21 @@ public class ProductService {
         Optional <Product> product = productRepository.findById(id);
         product.ifPresent(p -> {p.addRating(rating);
                         productRepository.save(p);
+        });
+    }
+
+    public boolean productsAvailable(List <ProductAvailableDTO> products){
+        return products.stream().allMatch( p -> {
+            Product product = productRepository.findById(p.getProductId()).get();
+            return (product != null && product.quantityAvailable(p.getQuantity()));
+        });
+    }
+
+    public void decreaseProductsQuantity(List <ProductAvailableDTO> products){
+        products.forEach( p -> {
+            Product product = productRepository.findById(p.getProductId()).get();
+            product.buy(p.getQuantity());
+            productRepository.save(product);
         });
     }
     

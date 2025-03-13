@@ -9,9 +9,12 @@ public class ProductDTO {
     private String name;
     @Getter @Setter
     private int quantity;
+    @Getter @Setter
+    private float price;
 
-    public ProductDTO(String name, int quantity) {
+    public ProductDTO(String name, int quantity, float price) {
         this.name = name;
         this.quantity = quantity;
+        this.price = price;
     }
 }

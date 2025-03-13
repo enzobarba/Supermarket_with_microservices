@@ -14,6 +14,7 @@ public class AccountController {
     @GetMapping("/registerAccount")
     public void registerAccount(){
         accountService.registerAccount("gino", "2709Gino*", "ginopollo@gmail.com", "Gino", "Pollo");
+        accountService.registerAccount("gino2", "2709Gino*", "ginopollo2@gmail.com", "Gino", "Pollo");
     }
 
     @GetMapping("/getAllAccounts")

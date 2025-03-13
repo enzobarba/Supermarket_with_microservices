@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.labISD.demo.dto.ProductAvailableDTO;
 import com.labISD.demo.dto.ProductDTO;
 import com.labISD.demo.enums.CATEGORY;
 
@@ -38,9 +39,9 @@ public class ProductController {
 		return "Products found: " + products.toString();
 	}
 
-	@PostMapping("/getNameQuantityProduct")
-	public ProductDTO getNameQuantityProduct(@RequestBody UUID productId){
-		return productService.getNameQuantityProduct(productId);
+	@PostMapping("/getProductDTO")
+	public ProductDTO getProductDTO(@RequestBody UUID productId){
+		return productService.getProductDTO(productId);
 	}
 
 	@GetMapping("/supplyProduct")
@@ -51,5 +52,15 @@ public class ProductController {
 	@GetMapping("/rateProduct")
 	public void rateProduct(@RequestParam(value = "id") UUID id, @RequestParam(value = "r") int r){
 		productService.rateProduct(id, r);
+	}
+
+	@PostMapping("/productsAvailable")
+	public boolean productsAvailable(@RequestBody List <ProductAvailableDTO> products){
+		return productService.productsAvailable(products);
+	}
+
+	@PostMapping("/decreaseProductsQuantity")
+	public void decreaseProductsQuantity(@RequestBody List <ProductAvailableDTO> products){
+		productService.decreaseProductsQuantity(products);
 	}
 }
