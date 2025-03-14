@@ -71,6 +71,14 @@ public class Cart {
 
     public void clear(){
         items.clear();
+        totalAmount = 0;
+    }
+
+    public boolean isEmpty(){
+        if(items.size() == 0){
+            return true;
+        }
+        return false;
     }
 
 }

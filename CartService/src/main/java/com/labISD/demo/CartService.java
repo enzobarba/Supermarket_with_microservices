@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import com.labISD.demo.dto.ProductDTO;
+import com.labISD.demo.dto.PaymentDTO;
 import com.labISD.demo.dto.ProductAvailableDTO;
 import java.util.ArrayList;
 import java.util.UUID;
@@ -63,19 +64,26 @@ public class CartService {
         cartRepository.save(cart);
     }
 
-    public String checkout(UUID userId){
+    //TO DO: auth for use a card
+    public String checkout(UUID userId, UUID cardId){
         Cart cart = cartRepository.findByUserId(userId);
+        if(cart.isEmpty()){
+            return "add Products first!";
+        }
         List <ProductAvailableDTO> productsList = createProductAvailableDTOs(cart);
         boolean productsAvailable = sendProductAvailableDTO(productsList);
-        if(! productsAvailable){
-            return "Quantità non disponibili";
+        if(!productsAvailable){
+            return "quantities not available";
         }
-        //Messaggio differente se sia productsAvailable e soldiDisponibili falso
+        //nel carrello ci potrebbero essere prezzi diversi da quelli dell'inventario (dovrei mettere sincronizzazione prodotto <-> carrelli tutti utenti)
+        boolean canSpend = checkPayment(new PaymentDTO(cardId, cart.getTotalAmount()));
+        if(!canSpend){
+            return "not enough money on credit card";
+        }
         clearCart(userId);
-        cart.setTotalAmount(0);
         cartRepository.save(cart);
         decreaseProductsQuantity(productsList);
-        return "Acquisto effettuato con successo!";
+        return "purchase made successfully!";
     }
 
     private List <ProductAvailableDTO> createProductAvailableDTOs(Cart cart){
@@ -98,6 +106,13 @@ public class CartService {
             .post().uri("http://product:9092/decreaseProductsQuantity")
             .bodyValue(productsList)
             .retrieve().toBodilessEntity().block(); 
+    }
+
+    private boolean checkPayment(PaymentDTO paymentDTO) {
+        return webClientBuilder.build()
+            .post().uri("http://creditCard:9093/spendMoneyFromCard")
+            .bodyValue(paymentDTO)
+            .retrieve().bodyToMono(Boolean.class).block(); 
     }
     
 }

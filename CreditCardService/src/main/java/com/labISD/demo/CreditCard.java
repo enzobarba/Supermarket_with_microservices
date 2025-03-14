@@ -5,7 +5,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -19,8 +18,8 @@ public class CreditCard {
     @Id @GeneratedValue(strategy = GenerationType.UUID) @Getter
     private UUID cardId;
 
-    @NotNull(message = "id cannot be null") @Getter @Setter
-    private UUID profileId;
+    @NotNull(message = "account id cannot be null") @Getter @Setter
+    private UUID accountId;
 
     @NotNull(message = "number cannot be null") @Getter @Setter
     @Pattern(regexp = "^[0-9]{16}$", message = "number must be exactly 16 digits")
@@ -32,7 +31,7 @@ public class CreditCard {
     private String type;
 
     @NotNull(message = "expiration date cannot be null") @Getter @Setter
-    @Future
+    //@Future con Date
     @Pattern(regexp = "^(0[1-9]|1[0-2])/[0-9]{2}$", message = "Expiration date must be in the format MM/yy")
     private String expirationDate;
 
@@ -42,8 +41,8 @@ public class CreditCard {
 
     protected CreditCard(){}
 
-    public CreditCard(UUID profileId, String number, String type, String expirationDate, float money){
-        this.profileId = profileId;
+    public CreditCard(UUID accountId, String number, String type, String expirationDate, float money){
+        this.accountId = accountId;
         this.number = number;
         this.type = type;
         this.expirationDate = expirationDate;
@@ -52,7 +51,7 @@ public class CreditCard {
 
     @Override
     public String toString(){
-        return String.format("Card ID: %s, Profile ID: %s, Number: %s, Type: %s, Expiration Date: %s, Money: %.2f", cardId, profileId, number, type, expirationDate,money);
+        return String.format("Card ID: %s, Account ID: %s, Number: %s, Type: %s, Expiration Date: %s, Money: %.2f", cardId, accountId, number, type, expirationDate,money);
     }
 
     public void spendMoney(float amount){

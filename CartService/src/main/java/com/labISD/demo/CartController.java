@@ -40,8 +40,8 @@ public class CartController {
     }  
     
     @GetMapping("/checkout")
-    public String checkout(@RequestParam(value = "userId") UUID userId){
-        return cartService.checkout(userId);
+    public String checkout(@RequestParam(value = "userId") UUID userId, @RequestParam(value = "cardId") UUID cardId){
+        return cartService.checkout(userId, cardId);
     }
 
 }
