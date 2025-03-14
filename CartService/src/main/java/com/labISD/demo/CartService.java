@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import com.labISD.demo.dto.ProductDTO;
+import com.labISD.demo.dto.OrderDTO;
+import com.labISD.demo.dto.OrderItemDTO;
 import com.labISD.demo.dto.PaymentDTO;
 import com.labISD.demo.dto.ProductAvailableDTO;
 import java.util.ArrayList;
@@ -80,9 +82,10 @@ public class CartService {
         if(!canSpend){
             return "not enough money on credit card";
         }
-        clearCart(userId);
-        cartRepository.save(cart);
+        OrderDTO orderDTO = createOrderDTO(cart, userId);
+        sendOrderDTO(orderDTO);
         decreaseProductsQuantity(productsList);
+        clearCart(userId);
         return "purchase made successfully!";
     }
 
@@ -113,6 +116,22 @@ public class CartService {
             .post().uri("http://creditCard:9093/spendMoneyFromCard")
             .bodyValue(paymentDTO)
             .retrieve().bodyToMono(Boolean.class).block(); 
+    }
+
+    private OrderDTO createOrderDTO(Cart cart, UUID userId){
+        List <OrderItemDTO> orderItemDTOs = new ArrayList<>();
+        cart.getItems().forEach( item -> {
+            orderItemDTOs.add(new OrderItemDTO(item.getProductId(), item.getName(), item.getQuantity(), item.getUnitPrice()));
+        });
+        OrderDTO orderDTO = new OrderDTO(userId, orderItemDTOs, cart.getTotalAmount());
+        return orderDTO;
+    }
+
+    private void sendOrderDTO(OrderDTO orderDTO) {
+        webClientBuilder.build()
+            .post().uri("http://order:9095/createOrder")
+            .bodyValue(orderDTO)
+            .retrieve().toBodilessEntity().block(); 
     }
     
 }

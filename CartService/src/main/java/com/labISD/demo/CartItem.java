@@ -31,17 +31,26 @@ public class CartItem {
     @Getter @Setter @NotNull(message = "name cannot be null") 
     private String name;
 
+    @Getter @Setter @NotNull(message = "unit price cannot be null") @Min(value = 0, message = "unit price must be greater than 0") 
+    private float unitPrice;
+
+    @Getter @Setter @NotNull(message = "total price cannot be null") @Min(value = 0, message = "total price must be greater than 0") 
+    private float totalPrice;
+
 
     protected CartItem(){}
 
-    public CartItem(UUID productId, int quantity, String name){
+    public CartItem(UUID productId, Cart cart, int quantity, String name, float unitPrice){
         this.productId = productId;
+        this.cart = cart;
         this.quantity = quantity;
         this.name = name;
+        this.unitPrice = unitPrice;
+        this.totalPrice = unitPrice * quantity;
     }       
 
     @Override
     public String toString(){
-        return String.format("id: %s, productId: %s, name: %s, quantity: %s", id, productId, name, quantity);
+        return String.format("id: %s, productId: %s, name: %s, quantity: %s, unit price: %.2f€, total price: %.2f€", id, productId, name, quantity, unitPrice, totalPrice);
     }
 }

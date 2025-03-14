@@ -1,7 +1,6 @@
 package com.labISD.demo;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
 import com.labISD.demo.dto.ProductAvailableDTO;
 import com.labISD.demo.dto.ProductDTO;
 import com.labISD.demo.enums.CATEGORY;

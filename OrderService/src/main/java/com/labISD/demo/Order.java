@@ -1,36 +1,42 @@
 package com.labISD.demo;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import lombok.Getter;
 import lombok.Setter;
-import jakarta.persistence.GenerationType;
-import java.util.UUID;
 import java.util.List;
-import jakarta.validation.constraints.Min;
+import java.util.UUID;
 import jakarta.validation.constraints.NotNull;
-import jakarta.persistence.CascadeType;
+import java.util.ArrayList;
 
 @Entity
+@Table(name = "orders") //Order is a reserved keyword for DB, like User
 public class Order {
-    
+
     @Id @GeneratedValue(strategy = GenerationType.UUID) @Getter
     private UUID orderId;
 
-    @NotNull(message = "user id cannot be null") @Getter @Setter
+    @Getter @Setter @NotNull(message = "user ID cannot be null")
     private UUID userId;
 
-   /* @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true) 
-    @Getter 
-    private List <OrderItem> items;*/ 
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Getter @Setter @NotNull(message = "items cannot be null")
+    private List<OrderItem> items;
 
-    @Getter @Setter
-    @Min(value = 0, message = "amount must be greater than or equal to 0")
-    private float amount;
+    @Getter @Setter @NotNull(message = "Total amount cannot be null")
+    @Min(value = 0, message = "Total amount must be greater than 0")
+    private float totalAmount;
 
-    protected Order(){}
+    protected Order() {}
 
+    public Order(UUID userId, float totalAmount) {
+        this.userId = userId;
+        this.items = new ArrayList<>();
+        this.totalAmount = totalAmount;
+    }
 
+    @Override
+    public String toString() {
+        return String.format("OrderId: %s, UserId: %s, Items: %s, Total amount: %.2f€", orderId, userId, items, totalAmount);
+    }
 }

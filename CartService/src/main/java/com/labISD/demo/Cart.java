@@ -54,12 +54,9 @@ public class Cart {
 
         if (existingItem.isPresent()) {
             existingItem.get().setQuantity(existingItem.get().getQuantity() + quantity);
+            existingItem.get().setTotalPrice(existingItem.get().getTotalPrice() + quantity*price);
         } else {
-            CartItem newItem = new CartItem();
-            newItem.setCart(this);
-            newItem.setProductId(productId);
-            newItem.setName(name);
-            newItem.setQuantity(quantity);
+            CartItem newItem = new CartItem(productId, this, quantity, name, price);
             items.add(newItem);
         }
         totalAmount+= quantity*price;

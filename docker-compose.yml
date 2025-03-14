@@ -50,6 +50,14 @@ services:
     networks:
       - localnetwork
 
+  order:
+    image: order-service:latest
+    restart: always
+    environment:
+      SERVER_PORT: 9095
+    networks:
+      - localnetwork
+
 networks:
   localnetwork:
     driver: bridge
