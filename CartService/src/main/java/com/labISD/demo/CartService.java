@@ -3,11 +3,7 @@ package com.labISD.demo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import com.labISD.demo.dto.ProductDTO;
-import com.labISD.demo.dto.OrderDTO;
-import com.labISD.demo.dto.OrderItemDTO;
-import com.labISD.demo.dto.PaymentDTO;
-import com.labISD.demo.dto.ProductAvailableDTO;
+import com.labISD.demo.dto.*;
 import java.util.ArrayList;
 import java.util.UUID;
 import java.util.List;
@@ -41,8 +37,8 @@ public class CartService {
             totalQuantity+= cartItem.getQuantity();
         }
         ProductDTO productDTO = getProductDTO(productId);
-        if(productDTO.getQuantity() >= totalQuantity){
-            cart.addItemToCart(productId, productDTO.getName(), quantity, productDTO.getPrice());
+        if(productDTO.quantity() >= totalQuantity){
+            cart.addItemToCart(productId, productDTO.name(), quantity, productDTO.price());
             cartRepository.save(cart);
         }
     }
@@ -121,7 +117,7 @@ public class CartService {
     private OrderDTO createOrderDTO(Cart cart, UUID userId){
         List <OrderItemDTO> orderItemDTOs = new ArrayList<>();
         cart.getItems().forEach( item -> {
-            orderItemDTOs.add(new OrderItemDTO(item.getProductId(), item.getName(), item.getQuantity(), item.getUnitPrice()));
+            orderItemDTOs.add(new OrderItemDTO(item.getProductId(), item.getName(), item.getQuantity(), item.getUnitPrice(), item.getUnitPrice()*item.getQuantity()));
         });
         OrderDTO orderDTO = new OrderDTO(userId, orderItemDTOs, cart.getTotalAmount());
         return orderDTO;

@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import com.labISD.demo.dto.ProfileRequest;
+import com.labISD.demo.dto.RegisterProfileDTO;
 
 @RestController
 public class ProfileController {
@@ -14,8 +14,8 @@ public class ProfileController {
     private ProfileService profileService;
 
     @PostMapping("/createProfile")
-    public void createProfile(@RequestBody ProfileRequest profileRequest) {
-        profileService.signIn(profileRequest.getUuid(), profileRequest.getName(), profileRequest.getSurname(), profileRequest.getEmail());
+    public void createProfile(@RequestBody RegisterProfileDTO profileRequestDTO) {
+        profileService.signIn(profileRequestDTO.id(), profileRequestDTO.name(), profileRequestDTO.surname(), profileRequestDTO.email());
     }
 
     @GetMapping("/getAllProfiles")

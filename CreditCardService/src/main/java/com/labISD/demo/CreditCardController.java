@@ -32,6 +32,6 @@ public class CreditCardController {
         
     @PostMapping("/spendMoneyFromCard")
     public boolean spendMoneyFromCard(@RequestBody PaymentDTO paymentDTO){
-        return creditCardService.spendMoneyFromCard(paymentDTO.getCardId(), paymentDTO.getAmount());
+        return creditCardService.spendMoneyFromCard(paymentDTO.cardId(), paymentDTO.amount());
     }
 }

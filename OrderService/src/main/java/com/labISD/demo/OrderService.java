@@ -22,10 +22,10 @@ public class OrderService {
     }
 
     public void createOrder(OrderDTO orderDTO){
-        Order newOrder = new Order(orderDTO.getUserId(), orderDTO.getTotalAmount());
+        Order newOrder = new Order(orderDTO.userId(), orderDTO.totalAmount());
         List <OrderItem> orderItems = new ArrayList<>();
-        orderDTO.getItems().forEach(item ->{
-            orderItems.add(new OrderItem(item.getProductId(), newOrder, item.getName(),item.getQuantity(), item.getUnitPrice()));
+        orderDTO.items().forEach(item ->{
+            orderItems.add(new OrderItem(item.productId(), newOrder, item.name(),item.quantity(), item.unitPrice()));
         });
         newOrder.setItems(orderItems);
         orderRepository.save(newOrder);

@@ -1,15 +1,15 @@
-- servizio ordini
-- implementare ServerGateway (vedere se farlo manuale, o con zuul) e aggiungere chiamate tra microservizi (gestione pagamento con carte di credito)
+- implementare ServerGateway (vedere se farlo manuale, o con zuul) (controller, service, entity per Audit?, request login e register senza token, altre request generiche, con token, string request e un certo DTO)
+- controllare DTO se devono essere record e serializzabili, come in codice Tramontana
 - vedere dove mettere authenticator, se mettere parte token in api gateway
-- catena Client-Server (interfaccia ui (thymeleaf+dto?))
+- catena Client-Server (interfaccia ui (thymeleaf+dto?), test Junit senza interazione utente?)
 - controlli chiamate, risposte ok/error, validated nei metodi opportuni (?)
-- in catena Client-Server ci vanno remote proxy e remote facade? Guardare codici prof
+- in catena Client-Server ci vanno remote proxy e remote facade? Guardare codici prof... in client mettere Proxy per controlli preliminari richieste?
 - rbac
 - gestione acquisti concorrenti (Transactional?)
 - DB per Service (controllare se va bene, dovrebbe)
 - RateLimiter in ApiGateway
 
-- logger di richieste al server
+- logger di richieste al server (AUDIT?)
 - passare da DB in memoria (H2) a DB su disco (MySQL ? )
 - nascondere codice d'invito
 - Session state per carrello utenti non loggati 

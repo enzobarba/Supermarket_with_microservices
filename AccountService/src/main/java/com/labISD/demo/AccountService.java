@@ -3,7 +3,8 @@ package com.labISD.demo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import com.labISD.demo.dto.ProfileRequest;
+import com.labISD.demo.dto.RegisterAccountDTO;
+import com.labISD.demo.dto.RegisterProfileDTO;
 import com.labISD.demo.Authentication.TokenGenerator;
 import com.labISD.demo.Authentication.TokenStore;
 import com.labISD.demo.Authentication.Token;
@@ -29,11 +30,10 @@ public class AccountService {
         this.webClientBuilder = webClientBuilder;
     }
 
-    public void registerAccount(final String username, final String passwd, final String email, final String name, final String surname) {
-        registerAccount(username, passwd, email, name, surname, null); 
-    }
-
-    public void registerAccount(final String username, final String passwd, final String email, final String name, final String surname, String inviteCode) {
+    public String registerAccount(RegisterAccountDTO registerAccountDTO) {
+        String username = registerAccountDTO.username();
+        String passwd = registerAccountDTO.passwd();
+        String inviteCode = registerAccountDTO.inviteCode();
         if (!username.matches("[a-zA-Z]{1}[a-zA-Z0-9]{2,29}"))
             throw new IllegalArgumentException();
         if (!passwd.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$"))
@@ -41,7 +41,7 @@ public class AccountService {
         if (accountRepository.findByUsername(username) != null)
             throw new IllegalArgumentException();
         final String hash = SCryptUtil.scrypt(passwd, 32768, 8, 1);
-        UUID uuid = UUID.randomUUID();
+        UUID id = UUID.randomUUID();
         ROLE role = null;
         if(inviteCode == null){
             role = ROLE.purchaser;
@@ -52,16 +52,17 @@ public class AccountService {
         else if(inviteCode == "SUPPLYER"){
             role = ROLE.supplyer;
         }
-        Account newAccount = new Account(uuid, username, hash, role);
+        Account newAccount = new Account(id, username, hash, role);
         accountRepository.save(newAccount);
-        createProfile(uuid, name, surname, email);     
-        createCart(uuid);
+        createProfile(new RegisterProfileDTO(id, registerAccountDTO.name(), registerAccountDTO.surname(), registerAccountDTO.email()));     
+        createCart(id);
+        return "Account successfully created";
     }
 
-    private void createProfile(UUID userId, String name, String surname, String email) {
+    private void createProfile(RegisterProfileDTO registerProfileDTO) {
         webClientBuilder.build()
             .post().uri("http://profile:9091/createProfile")
-            .bodyValue(new ProfileRequest(userId, name, surname, email))
+            .bodyValue(registerProfileDTO)
             .retrieve().toBodilessEntity().block(); 
     }
 
