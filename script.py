@@ -10,6 +10,9 @@ def build_microservices(base_path):
             subprocess.run("docker rmi -f $(docker images -q)", shell=True, check=False, cwd=base_path)
         
         for folder in os.listdir(base_path):
+            if folder.lower() == "client":  
+                print(f"Saltando la directory: {folder}")
+                continue
             folder_path = os.path.join(base_path, folder)
             pom_path = os.path.join(folder_path, "pom.xml")
             

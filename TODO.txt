@@ -1,5 +1,4 @@
-- implementare ServerGateway (vedere se farlo manuale, o con zuul) (controller, service, entity per Audit?, request login e register senza token, altre request generiche, con token, string request e un certo DTO)
-- controllare DTO se devono essere record e serializzabili, come in codice Tramontana
+- implementare ServerGateway  (controller, service, entity per Audit?, request login e register senza token, altre request generiche, con token, string request e un certo DTO)
 - vedere dove mettere authenticator, se mettere parte token in api gateway
 - catena Client-Server (interfaccia ui (thymeleaf+dto?), test Junit senza interazione utente?)
 - controlli chiamate, risposte ok/error, validated nei metodi opportuni (?)

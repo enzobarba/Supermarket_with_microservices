@@ -35,28 +35,36 @@ public class AccountService {
         String passwd = registerAccountDTO.passwd();
         String inviteCode = registerAccountDTO.inviteCode();
         if (!username.matches("[a-zA-Z]{1}[a-zA-Z0-9]{2,29}"))
-            throw new IllegalArgumentException();
+            return "Error: Invalid username format. Username must start with a letter and be between 3 and 30 characters.";
         if (!passwd.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$"))
-            throw new IllegalArgumentException();
+            return "Error: Password must contain at least one lowercase letter, one uppercase letter, one digit, and one special character.";
         if (accountRepository.findByUsername(username) != null)
-            throw new IllegalArgumentException();
+            return "Error: Username already exists.";
         final String hash = SCryptUtil.scrypt(passwd, 32768, 8, 1);
         UUID id = UUID.randomUUID();
-        ROLE role = null;
-        if(inviteCode == null){
-            role = ROLE.purchaser;
-        }
-        else if(inviteCode == "ADMIN"){
-            role = ROLE.admin;
-        }
-        else if(inviteCode == "SUPPLYER"){
-            role = ROLE.supplyer;
+        ROLE role = getRole(inviteCode);
+        if(role == null){
+            return "Error: invalid invite code.";
         }
         Account newAccount = new Account(id, username, hash, role);
         accountRepository.save(newAccount);
         createProfile(new RegisterProfileDTO(id, registerAccountDTO.name(), registerAccountDTO.surname(), registerAccountDTO.email()));     
         createCart(id);
         return "Account successfully created";
+    }
+
+    private ROLE getRole(String inviteCode){
+        ROLE role = null;
+        if(inviteCode == null){
+            role = ROLE.purchaser;
+        }
+        else if(inviteCode.equals("ADMIN")){
+            role = ROLE.admin;
+        }
+        else if(inviteCode.equals("SUPPLYER")){
+            role = ROLE.supplyer;
+        }
+        return role;
     }
 
     private void createProfile(RegisterProfileDTO registerProfileDTO) {

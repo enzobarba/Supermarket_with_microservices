@@ -15,9 +15,16 @@ public class ApiGatewayService {
         return sendRegistration(registerAccountDTO);
     }
 
+    public String getAllAccounts(){
+        return webClientBuilder.build()
+        .get()
+        .uri("http://account:9090/getAllAccounts")
+        .retrieve().bodyToMono(String.class).block(); 
+    }
+ 
     private String sendRegistration(RegisterAccountDTO registerAccountDTO) {
         return webClientBuilder.build()
-            .post().uri("http://account:9090/createAccount")
+            .post().uri("http://account:9090/registerAccount")
             .bodyValue(registerAccountDTO)
             .retrieve().bodyToMono(String.class).block(); 
     } 
