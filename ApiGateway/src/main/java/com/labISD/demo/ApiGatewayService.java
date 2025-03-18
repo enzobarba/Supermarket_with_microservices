@@ -15,6 +15,10 @@ public class ApiGatewayService {
         return sendRegistration(registerAccountDTO);
     }
 
+    public String login(LoginDTO loginDTO){
+        return sendLogin(loginDTO);
+    }
+
     public String getAllAccounts(){
         return webClientBuilder.build()
         .get()
@@ -28,4 +32,12 @@ public class ApiGatewayService {
             .bodyValue(registerAccountDTO)
             .retrieve().bodyToMono(String.class).block(); 
     } 
+
+    private String sendLogin(LoginDTO loginDTO) {
+        return webClientBuilder.build()
+            .post().uri("http://account:9090/login")
+            .bodyValue(loginDTO)
+            .retrieve().bodyToMono(String.class).block(); 
+    } 
+
 }

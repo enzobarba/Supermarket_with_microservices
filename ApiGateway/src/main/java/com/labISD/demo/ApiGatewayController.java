@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.labISD.demo.dto.RegisterAccountDTO;
+import com.labISD.demo.dto.LoginDTO;
 
 @RestController
 public class ApiGatewayController {
@@ -15,7 +16,6 @@ public class ApiGatewayController {
     
     @PostMapping("/account/registerAccount")
     public String registerAccount(@RequestBody RegisterAccountDTO registerAccountDTO){
-        System.out.println(registerAccountDTO.username());
         return apiGatewayService.registerAccount(registerAccountDTO);
     }
 
@@ -24,6 +24,9 @@ public class ApiGatewayController {
         return apiGatewayService.getAllAccounts();
     }
 
-
+    @PostMapping("/account/login")
+    public String login(@RequestBody LoginDTO loginDTO){
+        return apiGatewayService.login(loginDTO);
+    }
     
 }

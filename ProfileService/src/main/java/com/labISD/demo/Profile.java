@@ -35,7 +35,7 @@ public class Profile {
         this.name = name;
         this.surname = surname;
         this.email = email;
-        //TO DO: ADD ADDRESS, HOUSENUMBER, CITY (AFTER CHAIN CLIENT-SERVER AND REQUEST)
+        //TO DO: ADD ADDRESS, HOUSENUMBER, CITY
     }
 
     @Override

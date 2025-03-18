@@ -2,7 +2,6 @@ package com.labISD.demo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.Optional;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,8 +25,7 @@ public class ProfileService {
     }
 
     public Profile getProfile(UUID id){
-        Optional <Profile> profile = profileRepository.findById(id);
-        return profile.get();
+        return profileRepository.findById(id).orElse(null);
     }
 
 }

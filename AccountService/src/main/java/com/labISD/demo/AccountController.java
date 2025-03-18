@@ -4,9 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.labISD.demo.dto.RegisterAccountDTO;
+import com.labISD.demo.dto.*;
 
 @RestController
 public class AccountController {
@@ -21,18 +20,18 @@ public class AccountController {
 
     @GetMapping("/getAllAccounts")
     public String getAllAccounts(){
-        return accountService.getAllAccounts().toString();
+        return accountService.getAllAccounts();
     }
 
-    @GetMapping ("/logIn")
-    public String logIn(){
-        return accountService.logIn("gino", "2709Gino*");
+    @PostMapping ("/login")
+    public String login(@RequestBody LoginDTO loginDTO){
+        return accountService.login(loginDTO);
     }
 
     //TO DO: ADD LOGOUT (DESTROY TOKEN)
 
-    @GetMapping("/checkToken")
-    public boolean checkToken(@RequestParam (value = "t") String token){
+    @PostMapping("/checkToken")
+    public boolean checkToken(@RequestBody String token){
         return accountService.checkToken(token);
     }
 }

@@ -13,7 +13,7 @@ public class TokenGenerator {
 
     private static final String producer = "MyTokenAuthority";
     private static final String allChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvxyz";
-    private static final int validity = 10;
+    private static final int validity = 4;
     private static final int tokenLength = 30;
     private static KeyPair keyPair = null;
 
@@ -32,7 +32,7 @@ public class TokenGenerator {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Token t = new Token(payload, Instant.now(), Instant.now().plus(validity, ChronoUnit.SECONDS),
+        Token t = new Token(payload, Instant.now(), Instant.now().plus(validity, ChronoUnit.HOURS),
                 user, producer, signat);
         return t;
     }

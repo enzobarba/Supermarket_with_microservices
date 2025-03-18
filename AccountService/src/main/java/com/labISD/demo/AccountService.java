@@ -3,15 +3,11 @@ package com.labISD.demo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import com.labISD.demo.dto.RegisterAccountDTO;
-import com.labISD.demo.dto.RegisterProfileDTO;
-import com.labISD.demo.Authentication.TokenGenerator;
-import com.labISD.demo.Authentication.TokenStore;
-import com.labISD.demo.Authentication.Token;
+import com.labISD.demo.dto.*;
+import com.labISD.demo.Authentication.*;
 import com.lambdaworks.crypto.SCryptUtil;
 import com.labISD.demo.enums.ROLE;
 import java.util.UUID;
-import java.util.List;
 
 
 @Service
@@ -81,17 +77,18 @@ public class AccountService {
             .retrieve().toBodilessEntity().block(); 
     }
 
-    public String logIn(String user, String pwd) {
-        Account account = accountRepository.findByUsername(user);
+    //TO DO: FIX RETURN VALUE
+    public String login(LoginDTO loginDTO) {
+        Account account = accountRepository.findByUsername(loginDTO.username());
         if (null == account)
-            return null;
+            return "Error: Invalid credentials.";
         String authenticationInfo = account.getHashedPassword();
-        if (SCryptUtil.check(pwd, authenticationInfo)) {
-            Token token = tokenGenerator.tokenBuild(user);
+        if (SCryptUtil.check(loginDTO.password(), authenticationInfo)) {
+            Token token = tokenGenerator.tokenBuild(loginDTO.username());
             tokenStore.store(token);
             return token.payload();
         }
-        return null;
+        return "Error: Invalid credentials.";
     }
 
     public boolean checkToken(String tokenPayload){
@@ -102,7 +99,7 @@ public class AccountService {
         return validToken;
     }
 
-    public List <Account> getAllAccounts(){
-        return accountRepository.findAll();
+    public String getAllAccounts(){
+        return accountRepository.findAll().toString();
     }
 }

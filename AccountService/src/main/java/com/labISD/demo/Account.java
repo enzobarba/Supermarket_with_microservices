@@ -39,6 +39,6 @@ public class Account {
 
     @Override
     public String toString(){
-        return String.format("Id: %s, Username: %s, HashedPassword: %s, Role: %s", id, username, hashedPassword, role);
+        return String.format("ID: %s, Username: %s, Role: %s", id, username, hashedPassword, role);
     }
 }
