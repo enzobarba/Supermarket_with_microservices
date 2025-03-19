@@ -14,13 +14,13 @@ public class ProfileController {
     private ProfileService profileService;
 
     @PostMapping("/createProfile")
-    public void createProfile(@RequestBody RegisterProfileDTO profileRequestDTO) {
-        profileService.signIn(profileRequestDTO.id(), profileRequestDTO.name(), profileRequestDTO.surname(), profileRequestDTO.email());
+    public boolean createProfile(@RequestBody RegisterProfileDTO profileRequestDTO) {
+        return profileService.signIn(profileRequestDTO.id(), profileRequestDTO.name(), profileRequestDTO.surname(), profileRequestDTO.email());
     }
 
     @GetMapping("/getAllProfiles")
     public String getAllProfiles(){
-        return profileService.getAllProfiles().toString();
+        return profileService.getAllProfiles();
    }
     
 }

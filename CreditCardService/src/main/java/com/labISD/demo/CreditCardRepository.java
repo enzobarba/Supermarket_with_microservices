@@ -5,6 +5,7 @@ import java.util.UUID;
 
 public interface CreditCardRepository extends JpaRepository <CreditCard, UUID>{
     
-    public CreditCard findByAccountId(UUID accountId);
+    public CreditCard findByUserId(UUID userId);
+    public CreditCard findByNumber(String number);
 
 }

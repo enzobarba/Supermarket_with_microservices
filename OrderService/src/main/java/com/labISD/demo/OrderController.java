@@ -17,12 +17,12 @@ public class OrderController {
 
     @GetMapping("/getAllOrders")
     public String getAllOrders(){
-        return orderService.getAllOrders().toString();
+        return orderService.getAllOrders();
     }
 
     @GetMapping("/getAllUserOrders")
     public String getAllUserOrder(@RequestParam(value = "userId") UUID userId){
-        return orderService.getAllUserOrders(userId).toString();
+        return orderService.getAllUserOrders(userId);
     }
 
     @PostMapping("/createOrder")

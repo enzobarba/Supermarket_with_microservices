@@ -13,7 +13,7 @@ import lombok.Setter;
 @Entity
 public class Profile {
     
-    @Id @NotNull(message = "id cannot be null") @Getter @Setter
+    @Id @NotNull(message = "ID cannot be null") @Getter @Setter
     private UUID id;
 
     @NotNull(message = "name cannot be null") @Getter @Setter

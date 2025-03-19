@@ -8,6 +8,7 @@ import com.labISD.demo.Authentication.*;
 import com.lambdaworks.crypto.SCryptUtil;
 import com.labISD.demo.enums.ROLE;
 import java.util.UUID;
+import java.util.List;
 
 
 @Service
@@ -30,22 +31,26 @@ public class AccountService {
         String username = registerAccountDTO.username();
         String passwd = registerAccountDTO.passwd();
         String inviteCode = registerAccountDTO.inviteCode();
+        if (accountRepository.findByUsername(username) != null)
+            return "Error: Username already exists.";
+        //redundant constraint (also in entity)
         if (!username.matches("[a-zA-Z]{1}[a-zA-Z0-9]{2,29}"))
             return "Error: Invalid username format. Username must start with a letter and be between 3 and 30 characters.";
         if (!passwd.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$"))
             return "Error: Password must contain at least one lowercase letter, one uppercase letter, one digit, and one special character.";
-        if (accountRepository.findByUsername(username) != null)
-            return "Error: Username already exists.";
         final String hash = SCryptUtil.scrypt(passwd, 32768, 8, 1);
         UUID id = UUID.randomUUID();
         ROLE role = getRole(inviteCode);
         if(role == null){
             return "Error: invalid invite code.";
         }
+        Boolean profileCreated = createProfile(new RegisterProfileDTO(id, registerAccountDTO.name(), registerAccountDTO.surname(), registerAccountDTO.email()));     
+        if(profileCreated == false){
+            return "Email already in use.";
+        }
+        createCart(id);
         Account newAccount = new Account(id, username, hash, role);
         accountRepository.save(newAccount);
-        createProfile(new RegisterProfileDTO(id, registerAccountDTO.name(), registerAccountDTO.surname(), registerAccountDTO.email()));     
-        createCart(id);
         return "Account successfully created";
     }
 
@@ -61,13 +66,14 @@ public class AccountService {
             role = ROLE.supplyer;
         }
         return role;
+
     }
 
-    private void createProfile(RegisterProfileDTO registerProfileDTO) {
-        webClientBuilder.build()
+    private boolean createProfile(RegisterProfileDTO registerProfileDTO) {
+        return webClientBuilder.build()
             .post().uri("http://profile:9091/createProfile")
             .bodyValue(registerProfileDTO)
-            .retrieve().toBodilessEntity().block(); 
+            .retrieve().bodyToMono(boolean.class).block(); 
     }
 
     private void createCart(UUID userId) {
@@ -100,6 +106,10 @@ public class AccountService {
     }
 
     public String getAllAccounts(){
-        return accountRepository.findAll().toString();
+        List <Account> accounts = accountRepository.findAll();
+        if(accounts.size() == 0){
+            return "No accounts";
+        }
+        return accounts.toString();
     }
 }

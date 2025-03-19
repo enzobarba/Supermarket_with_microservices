@@ -3,6 +3,7 @@ package com.labISD.demo;
 import java.util.UUID;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Column;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.Min;
@@ -18,12 +19,13 @@ public class CreditCard {
     @Id @GeneratedValue(strategy = GenerationType.UUID) @Getter
     private UUID cardId;
 
-    @NotNull(message = "account id cannot be null") @Getter @Setter
-    private UUID accountId;
+    @NotNull(message = "user ID cannot be null") @Getter @Setter
+    private UUID userId;
 
     @NotNull(message = "number cannot be null") @Getter @Setter
     @Pattern(regexp = "^[0-9]{16}$", message = "number must be exactly 16 digits")
     @Size(min = 1, max = 50, message = "length of number must be 1-30") 
+    @Column(unique = true)
     private String number;
 
     @NotNull(message = "type cannot be null") @Getter @Setter
@@ -31,7 +33,6 @@ public class CreditCard {
     private String type;
 
     @NotNull(message = "expiration date cannot be null") @Getter @Setter
-    //@Future con Date
     @Pattern(regexp = "^(0[1-9]|1[0-2])/[0-9]{2}$", message = "Expiration date must be in the format MM/yy")
     private String expirationDate;
 
@@ -41,8 +42,8 @@ public class CreditCard {
 
     protected CreditCard(){}
 
-    public CreditCard(UUID accountId, String number, String type, String expirationDate, float money){
-        this.accountId = accountId;
+    public CreditCard(UUID userId, String number, String type, String expirationDate, float money){
+        this.userId = userId;
         this.number = number;
         this.type = type;
         this.expirationDate = expirationDate;
@@ -51,7 +52,7 @@ public class CreditCard {
 
     @Override
     public String toString(){
-        return String.format("Card ID: %s, Account ID: %s, Number: %s, Type: %s, Expiration Date: %s, Money: %.2f", cardId, accountId, number, type, expirationDate,money);
+        return String.format("Card ID: %s, User ID: %s, Number: %s, Type: %s, Expiration Date: %s, Money: %.2f", cardId, userId, number, type, expirationDate,money);
     }
 
     public void spendMoney(float amount){

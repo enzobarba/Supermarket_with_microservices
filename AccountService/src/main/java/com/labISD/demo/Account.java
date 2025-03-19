@@ -14,7 +14,7 @@ import com.labISD.demo.enums.ROLE;
 @Entity
 public class Account {
     
-    @Id @Getter @Setter @NotNull(message = "id cannot be null")
+    @Id @Getter @Setter @NotNull(message = "ID cannot be null")
     private UUID id;
 
     @NotNull(message = "username cannot be null") @Getter @Setter @Column(unique = true)

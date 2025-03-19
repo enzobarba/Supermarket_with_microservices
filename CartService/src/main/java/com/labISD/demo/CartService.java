@@ -36,18 +36,18 @@ public class CartService {
         if(cartItem != null){
             totalQuantity+= cartItem.getQuantity();
         }
-        ProductDTO productDTO = getProductDTO(productId);
-        if(productDTO.quantity() >= totalQuantity){
-            cart.addItemToCart(productId, productDTO.name(), quantity, productDTO.price());
+        ProductCartDTO ProductCartDTO = getProductCartDTO(productId);
+        if(ProductCartDTO.quantity() >= totalQuantity){
+            cart.addItemToCart(productId, ProductCartDTO.name(), quantity, ProductCartDTO.price());
             cartRepository.save(cart);
         }
     }
 
-    private ProductDTO getProductDTO(UUID productId) {
+    private ProductCartDTO getProductCartDTO(UUID productId) {
         return webClientBuilder.build()
-            .post().uri("http://product:9092/getProductDTO")
+            .post().uri("http://product:9092/getProductCartDTO")
             .bodyValue(productId)
-            .retrieve().bodyToMono(ProductDTO.class).block(); 
+            .retrieve().bodyToMono(ProductCartDTO.class).block(); 
     }
     
     public void removeItemFromCart(UUID userId, UUID productId) {

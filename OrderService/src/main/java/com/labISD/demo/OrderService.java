@@ -13,12 +13,20 @@ public class OrderService {
     @Autowired
     private OrderRepository orderRepository;
 
-    public List <Order> getAllOrders(){
-        return orderRepository.findAll();
+    public String getAllOrders(){
+        List <Order> orders = orderRepository.findAll();
+        if(orders.size() == 0){
+            return "no orders";
+        }
+        return orders.toString();
     }
 
-    public List <Order> getAllUserOrders(UUID userId){
-        return orderRepository.findByUserId(userId);
+    public String getAllUserOrders(UUID userId){
+        List <Order> userOrders = orderRepository.findByUserId(userId);
+        if(userOrders.size() == 0){
+            return "no user order";
+        }
+        return userOrders.toString();
     }
 
     public void createOrder(OrderDTO orderDTO){
