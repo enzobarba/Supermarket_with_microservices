@@ -38,19 +38,17 @@ public class AccountService {
             return "Error: Invalid username format. Username must start with a letter and be between 3 and 30 characters.";
         if (!passwd.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$"))
             return "Error: Password must contain at least one lowercase letter, one uppercase letter, one digit, and one special character.";
+        if(accountRepository.findByEmail(registerAccountDTO.email()) != null){
+            return "Email already in use.";
+        }
         final String hash = SCryptUtil.scrypt(passwd, 32768, 8, 1);
-        UUID id = UUID.randomUUID();
         ROLE role = getRole(inviteCode);
         if(role == null){
             return "Error: invalid invite code.";
         }
-        Boolean profileCreated = createProfile(new RegisterProfileDTO(id, registerAccountDTO.name(), registerAccountDTO.surname(), registerAccountDTO.email()));     
-        if(profileCreated == false){
-            return "Email already in use.";
-        }
-        createCart(id);
-        Account newAccount = new Account(id, username, hash, role);
+        Account newAccount = new Account(registerAccountDTO.username(), hash, role, registerAccountDTO.name(), registerAccountDTO.surname(), registerAccountDTO.email());
         accountRepository.save(newAccount);
+        createCart(newAccount.getId());
         return "Account successfully created";
     }
 
@@ -69,17 +67,9 @@ public class AccountService {
 
     }
 
-    private boolean createProfile(RegisterProfileDTO registerProfileDTO) {
-        return webClientBuilder.build()
-            .post().uri("http://profile:9091/createProfile")
-            .bodyValue(registerProfileDTO)
-            .retrieve().bodyToMono(boolean.class).block(); 
-    }
-
     private void createCart(UUID userId) {
         webClientBuilder.build()
-            .post().uri("http://cart:9094/createCart")
-            .bodyValue(userId)
+            .get().uri("http://product:9091/createCart?userId="+userId)
             .retrieve().toBodilessEntity().block(); 
     }
 

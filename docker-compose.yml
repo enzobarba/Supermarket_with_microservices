@@ -18,19 +18,11 @@ services:
     networks:
       - localnetwork
 
-  profile:
-    image: profile-service:latest
-    restart: always
-    environment:
-      SERVER_PORT: 9091
-    networks:
-      - localnetwork
-
   product:
     image: product-service:latest
     restart: always
     environment:
-      SERVER_PORT: 9092
+      SERVER_PORT: 9091
     networks:
       - localnetwork
 
@@ -38,23 +30,7 @@ services:
     image: creditcard-service:latest
     restart: always
     environment:
-      SERVER_PORT: 9093
-    networks:
-      - localnetwork
-
-  cart:
-    image: cart-service:latest
-    restart: always
-    environment:
-      SERVER_PORT: 9094
-    networks:
-      - localnetwork
-
-  order:
-    image: order-service:latest
-    restart: always
-    environment:
-      SERVER_PORT: 9095
+      SERVER_PORT: 9092
     networks:
       - localnetwork
 

@@ -10,5 +10,6 @@ public interface AccountRepository extends JpaRepository <Account, UUID> {
     
     public Account findByUsername(String username);
     public List <Account> findByRole(ROLE role);
+    public Account findByEmail(String email);
 
 }

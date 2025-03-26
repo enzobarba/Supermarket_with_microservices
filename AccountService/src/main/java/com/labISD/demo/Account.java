@@ -3,18 +3,21 @@ package com.labISD.demo;
 import java.util.UUID;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import jakarta.validation.constraints.Pattern;  
 import lombok.Setter;
+import jakarta.validation.constraints.Email;
 import com.labISD.demo.enums.ROLE;
 
 @Entity
 public class Account {
     
-    @Id @Getter @Setter @NotNull(message = "ID cannot be null")
+    @Id @Getter @Setter @NotNull(message = "ID cannot be null") @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @NotNull(message = "username cannot be null") @Getter @Setter @Column(unique = true)
@@ -28,17 +31,31 @@ public class Account {
     @NotNull(message = "role cannot be null") @Getter @Setter
     private ROLE role;
 
+    @NotNull(message = "name cannot be null") @Getter @Setter
+    @Size(min = 1, max = 50, message = "length of name must be 1-50") 
+    private String name;
+
+    @NotNull(message = "surname cannot be null") @Getter @Setter
+    @Size(min = 1, max = 50, message = "length of surname must be 1-50") 
+    private String surname;
+
+    @Email (message = "must be email format [name@domain.com]")
+    @Getter @Setter @Column(unique = true) @NotNull(message = "email cannot be null")
+    private String email;
+
     protected Account(){}
 
-    public Account(UUID id, String username, String hashedPassword, ROLE role){
-        this.id = id;
+    public Account(String username, String hashedPassword, ROLE role, String name, String surname, String email){
         this.username = username;
         this.hashedPassword = hashedPassword;
         this.role = role;
+        this.name = name;
+        this.surname = surname;
+        this.email = email;
     }
 
     @Override
     public String toString(){
-        return String.format("ID: %s, Username: %s, Role: %s", id, username, hashedPassword, role);
+        return String.format("ID: %s, Username: %s, Role: %s, Name: %s, Surname: %s, Email: %s", id, username, role, name, surname, email);
     }
 }
