@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import com.labISD.demo.dto.*;
 import com.labISD.demo.Authentication.*;
+import com.labISD.demo.Permission.PageController;
 import com.lambdaworks.crypto.SCryptUtil;
 import com.labISD.demo.enums.ROLE;
 import java.util.UUID;
@@ -17,13 +18,15 @@ public class AccountService {
     private final AccountRepository accountRepository;
     private final TokenStore tokenStore;
     private final TokenGenerator tokenGenerator;
+    private final PageController pageController;
     private WebClient.Builder webClientBuilder;
 
     @Autowired
-    public AccountService(AccountRepository accountRepository, TokenStore tokenStore, TokenGenerator tokenGenerator, WebClient.Builder webClientBuilder) {
+    public AccountService(AccountRepository accountRepository, TokenStore tokenStore, TokenGenerator tokenGenerator, PageController pageController, WebClient.Builder webClientBuilder) {
         this.accountRepository = accountRepository;
         this.tokenStore = tokenStore;
         this.tokenGenerator = tokenGenerator;
+        this.pageController = pageController;
         this.webClientBuilder = webClientBuilder;
     }
 
@@ -60,8 +63,8 @@ public class AccountService {
         else if(inviteCode.equals("ADMIN")){
             role = ROLE.admin;
         }
-        else if(inviteCode.equals("SUPPLYER")){
-            role = ROLE.supplyer;
+        else if(inviteCode.equals("SUPPLIER")){
+            role = ROLE.supplier;
         }
         return role;
 
@@ -101,5 +104,10 @@ public class AccountService {
             return "No accounts";
         }
         return accounts.toString();
+    }
+
+    public boolean checkRequest(RequestDTO requestDTO){
+        ROLE role = accountRepository.findByUsername(requestDTO.username()).getRole();
+        return pageController.requestOp(role, requestDTO.request());
     }
 }

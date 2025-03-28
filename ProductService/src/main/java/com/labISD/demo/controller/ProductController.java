@@ -33,7 +33,7 @@ public class ProductController {
 	}
 
 	@GetMapping("/getProductsByCategory")
-	public String getProductsByCategory(CATEGORY category){
+	public String getProductsByCategory(@RequestParam(value = "category") CATEGORY category){
 		return productService.getProductsByCategory(category);
 	}
 

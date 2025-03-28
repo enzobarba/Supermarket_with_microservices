@@ -34,4 +34,9 @@ public class AccountController {
     public boolean checkToken(@RequestBody String token){
         return accountService.checkToken(token);
     }
+    
+    @PostMapping("/checkRequest")
+    public boolean checkRequest(@RequestBody RequestDTO requestDTO){
+        return accountService.checkRequest(requestDTO);
+    }
 }

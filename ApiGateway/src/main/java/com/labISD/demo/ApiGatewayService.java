@@ -12,11 +12,17 @@ public class ApiGatewayService {
     private WebClient.Builder webClientBuilder;
 
     public String registerAccount(RegisterAccountDTO registerAccountDTO){
-        return sendRegistration(registerAccountDTO);
+        return webClientBuilder.build()
+        .post().uri("http://account:9090/registerAccount")
+        .bodyValue(registerAccountDTO)
+        .retrieve().bodyToMono(String.class).block(); 
     }
 
     public String login(LoginDTO loginDTO){
-        return sendLogin(loginDTO);
+        return webClientBuilder.build()
+        .post().uri("http://account:9090/login")
+        .bodyValue(loginDTO)
+        .retrieve().bodyToMono(String.class).block(); 
     }
 
     public String getAllAccounts(){
@@ -25,19 +31,31 @@ public class ApiGatewayService {
         .uri("http://account:9090/getAllAccounts")
         .retrieve().bodyToMono(String.class).block(); 
     }
- 
-    private String sendRegistration(RegisterAccountDTO registerAccountDTO) {
-        return webClientBuilder.build()
-            .post().uri("http://account:9090/registerAccount")
-            .bodyValue(registerAccountDTO)
-            .retrieve().bodyToMono(String.class).block(); 
-    } 
+    
+    public String checkRequest(RequestDTO requestDTO){
+        boolean permission = webClientBuilder.build()
+        .post().uri("http://account:9090/checkRequest")
+        .bodyValue(requestDTO)
+        .retrieve().bodyToMono(Boolean.class).block(); 
+        if(permission == true){
+            return String.format("Operation %s requested by %s: ALLOWED",requestDTO.request(), requestDTO.username());
+        }
+        return String.format("Operation %s requested by %s: DENIED",requestDTO.request(), requestDTO.username());
+    }
 
-    private String sendLogin(LoginDTO loginDTO) {
+    public String addProduct(ProductDTO productDTO){
         return webClientBuilder.build()
-            .post().uri("http://account:9090/login")
-            .bodyValue(loginDTO)
-            .retrieve().bodyToMono(String.class).block(); 
-    } 
+        .post()
+        .uri("http://product:9091/addProduct").bodyValue(productDTO)
+        .retrieve().bodyToMono(String.class).block(); 
+    }
 
+    public String getAllProducts(){
+        return webClientBuilder.build()
+        .get()
+        .uri("http://product:9091/getAllProducts")
+        .retrieve().bodyToMono(String.class).block(); 
+    }
+
+   
 }

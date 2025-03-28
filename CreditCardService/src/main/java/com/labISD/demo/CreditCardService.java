@@ -1,9 +1,9 @@
 package com.labISD.demo;
 
-import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.labISD.demo.dto.CreditCardDTO;
+import com.labISD.demo.dto.PaymentDTO;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -32,12 +32,12 @@ public class CreditCardService {
         return expDate.isAfter(YearMonth.now()); 
     }
 
-    public boolean spendMoneyFromCard(UUID cardId, float amount){
+    public boolean spendMoneyFromCard(PaymentDTO paymentDTO){
         //check first if card exists (different method called by cartService)
         boolean canSpend = false;
-        CreditCard creditCard = creditCardRepository.findById(cardId).get();
-        if(creditCard.canSpendMoney(amount)){
-            creditCard.spendMoney(amount);
+        CreditCard creditCard = creditCardRepository.findById(paymentDTO.cardId()).get();
+        if(creditCard.canSpendMoney(paymentDTO.amount())){
+            creditCard.spendMoney(paymentDTO.amount());
             canSpend = true;
             creditCardRepository.save(creditCard);
         }

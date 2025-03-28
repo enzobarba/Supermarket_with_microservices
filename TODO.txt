@@ -1,14 +1,13 @@
-- sistemare microservizio product (metà circa controller e service), tutto cart
+- rbac
 - implementare ServerGateway  (entity per Audit?, request generiche con token, string request e un certo DTO (centralizzate in unico metodo, ma cambiano i DTO???))
-- vedere dove mettere authenticator, se mettere parte token in api gateway
-- catena Client-Server (interfaccia ui (thymeleaf+dto?), test Junit senza interazione utente?)
+- catena Client-Server (test Junit senza interazione utente)
 - controlli chiamate, risposte ok/error, vincoli ridondanti da sistemare (@Validated in DTO?)
 - in catena Client-Server ci va remote proxy? Guardare codici prof... in client mettere Proxy per controlli preliminari richieste?
-- rbac
 - gestione acquisti concorrenti (Transactional?)
 - DB per Service (controllare se va bene, dovrebbe)
 - RateLimiter in ApiGateway
 
+- distinguere getAllProducts tra Purchaser e Supplier, rivedere permessi ad Admin
 - logger di richieste al server (AUDIT?)
 - Session state per carrello utenti non loggati 
 - passare da DB in memoria (H2) a DB su disco (MySQL ?)
