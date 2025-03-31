@@ -37,7 +37,11 @@ public class AccountController {
     public String getAllAccounts(){
         return accountService.getAllAccounts();
     }
-    //TO DO: ADD LOGOUT (DESTROY TOKEN)
+
+    @PostMapping ("/logout")
+    public String login(@RequestBody String token){
+        return accountService.logout(token);
+    }
 
     @PostMapping("/checkRequest")
     public boolean checkRequest(@RequestBody RequestDTO requestDTO){

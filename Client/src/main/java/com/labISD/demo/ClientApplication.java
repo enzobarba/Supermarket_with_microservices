@@ -32,9 +32,10 @@ public class ClientApplication {
                         .block();                      
     }
 
-    public String addProduct(NewProductDTO productDTO) {
+    public String addProduct(String token, NewProductDTO productDTO) {
         return webClient.post()
                         .uri("/product/addProduct")  
+                        .header("Authorization", token) 
                         .bodyValue(productDTO)
                         .retrieve()                    
                         .bodyToMono(String.class)       
@@ -42,18 +43,18 @@ public class ClientApplication {
     }
 
     public String getAllAccounts(String token) {
-        return webClient.post()
+        return webClient.get()
                         .uri("/account/getAllAccounts")  
-                        .bodyValue(token)
+                        .header("Authorization", token) 
                         .retrieve()                    
                         .bodyToMono(String.class)       
                         .block();                      
     }
 
     public String getAllProducts(String token) {
-        return webClient.post()
+        return webClient.get()
                         .uri("/product/getAllProducts")  
-                        .bodyValue(token)
+                        .header("Authorization", token) 
                         .retrieve()                    
                         .bodyToMono(String.class)       
                         .block();                      
@@ -74,20 +75,20 @@ public class ClientApplication {
 
         String token = client.login(new LoginDTO("supplier", "Password123!"));
         System.out.println("Risposta da login: " + token);
-        String addProductResponse = client.addProduct(new NewProductDTO(token,"pollo", 2, 22, 1, CATEGORY.Meat));
+        String addProductResponse = client.addProduct(token, new NewProductDTO("pollo", 2, 22, 1, CATEGORY.Meat));
         System.out.println("Risposta da addProduct: " + addProductResponse);
         System.out.println("Risposta da getAllAccounts: "+client.getAllAccounts(token));
         System.out.println("Risposta da getAllProducts: "+client.getAllProducts(token));
 
         token = client.login(new LoginDTO("admin", "Password123!"));
         System.out.println("Risposta da login: " + token);
-        addProductResponse = client.addProduct(new NewProductDTO(token,"pane", 2, 22, 1, CATEGORY.Bread));
+        addProductResponse = client.addProduct(token, new NewProductDTO("pollo", 2, 22, 1, CATEGORY.Meat));
         System.out.println("Risposta da addProduct: " + addProductResponse);
         System.out.println("Risposta da getAllAccounts: "+client.getAllAccounts(token));
         System.out.println("Risposta da getAllProducts: "+client.getAllProducts(token));
 
 
-        addProductResponse = client.addProduct(new NewProductDTO("fakeToken","pizza", 2, 22, 1, CATEGORY.Bread));
+        addProductResponse = client.addProduct("fakeToken", new NewProductDTO("pollo", 2, 22, 1, CATEGORY.Meat));
         System.out.println("Risposta da addProduct: " + addProductResponse);
         System.out.println("Risposta da getAllAccounts: "+client.getAllAccounts("fakeToken"));
         System.out.println("Risposta da getAllProducts: "+client.getAllProducts("FakeToken"));

@@ -12,6 +12,33 @@ public class ApiGatewayService {
     @Autowired
     private WebClient.Builder webClientBuilder;
 
+    public String registerAccount(NewAccountDTO registerAccountDTO){
+        return makeRequest("http://account:9090/registerAccount", "POST", registerAccountDTO, String.class); 
+    }
+
+    public String login(LoginDTO loginDTO){
+        return makeRequest("http://account:9090/login", "POST", loginDTO, String.class);
+    }
+
+    public String logout(String token){
+        return makeRequest("http://account:9090/logout", "POST", token, String.class);
+    }
+
+    public String getAllAccounts(String token){
+        return executeAuthAuthRequest(token, "getAllAccounts",
+         "http://account:9090/getAllAccounts", "GET", null);
+    }
+
+    public String addProduct(String token, NewProductDTO productDTO){
+        return executeAuthAuthRequest(token, "addProduct",
+            "http://product:9091/addProduct", "POST", productDTO);
+    }
+
+    public String getAllProducts(String token){
+        return executeAuthAuthRequest(token, "getAllProducts",
+            "http://product:9091/getAllProducts", "GET", null);
+    }
+
     private <T, R> R makeRequest(String url, String method, T body, Class<R> responseType) {
         WebClient webClient = webClientBuilder.build();
         WebClient.RequestHeadersSpec<?> requestSpec; 
@@ -22,41 +49,16 @@ public class ApiGatewayService {
                                    .uri(url)
                                    .bodyValue(body);
         }
-    
+
         return requestSpec.retrieve().bodyToMono(responseType).block();
     }
-    
 
-    public String registerAccount(NewAccountDTO registerAccountDTO){
-        return makeRequest("http://account:9090/registerAccount", "POST", registerAccountDTO, String.class); 
-    }
-
-    public String login(LoginDTO loginDTO){
-        return makeRequest("http://account:9090/login", "POST", loginDTO, String.class);
-    }
-
-    public String addProduct(NewProductDTO productDTO){
-        String checkAuthAuth = checkAuthAuth(productDTO.token(), "addProduct");
-        if(!checkAuthAuth.equals("OK")){
-            return checkAuthAuth;
+    private String executeAuthAuthRequest(String token, String action, String url, String method, Object body) {
+        String authResult = checkAuthAuth(token, action);
+        if (!authResult.equals("OK")) {
+            return authResult;
         }
-        return makeRequest("http://product:9091/addProduct", "POST", productDTO, String.class);
-    }
-
-    public String getAllAccounts(String token){
-        String checkAuthAuth = checkAuthAuth(token, "getAllAccounts");
-        if(!checkAuthAuth.equals("OK")){
-            return checkAuthAuth;
-        }
-        return makeRequest("http://account:9090/getAllAccounts", "GET", token, String.class);
-    }
-
-    public String getAllProducts(String token){
-        String checkAuthAuth = checkAuthAuth(token, "getAllProducts");
-        if(!checkAuthAuth.equals("OK")){
-            return checkAuthAuth;
-        }
-        return makeRequest("http://product:9091/getAllProducts", "GET", token, String.class);
+        return makeRequest(url, method, body, String.class);
     }
 
     private String checkAuthAuth(String token, String request){
@@ -84,5 +86,6 @@ public class ApiGatewayService {
     private String getUserByToken(String token){
         return makeRequest("http://account:9090/getUserByToken", "POST", token, String.class);
     }
+        
 
 }

@@ -1,8 +1,10 @@
 package com.labISD.demo;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import com.labISD.demo.dto.NewAccountDTO;
 import com.labISD.demo.dto.LoginDTO;
@@ -24,18 +26,23 @@ public class ApiGatewayController {
         return apiGatewayService.login(loginDTO);
     }
 
-    @PostMapping("/product/addProduct")
-    public String addProduct(@RequestBody NewProductDTO productDTO){
-        return apiGatewayService.addProduct(productDTO);
+    @PostMapping("/account/logout")
+    public String logout(@RequestBody String token){
+        return apiGatewayService.logout(token);
     }
 
-    @PostMapping("/account/getAllAccounts")
-    public String getAllAccounts(@RequestBody String token){
+    @PostMapping("/product/addProduct")
+    public String addProduct(@RequestHeader("Authorization") String token, @RequestBody NewProductDTO productDTO){
+        return apiGatewayService.addProduct(token, productDTO);
+    }
+
+    @GetMapping("/account/getAllAccounts")
+    public String getAllAccounts(@RequestHeader("Authorization") String token){
         return apiGatewayService.getAllAccounts(token);
     }
 
-    @PostMapping("/product/getAllProducts")
-    public String getAllProducts(@RequestBody String token){
+    @GetMapping("/product/getAllProducts")
+    public String getAllProducts(@RequestHeader("Authorization") String token){
         return apiGatewayService.getAllProducts(token);
     }
 

@@ -95,7 +95,6 @@ public class AccountService {
         if(tokenStore.isPresent(tokenPayload)){
             isTokenValid = true;
         }
-        //System.out.println(tokenStore.isValidSignature(tokenPayload));
         return isTokenValid;
     }
 
@@ -114,5 +113,10 @@ public class AccountService {
     public boolean checkRequest(RequestDTO requestDTO){
         ROLE role = accountRepository.findByUsername(requestDTO.username()).getRole();
         return pageController.requestOp(role, requestDTO.request());
+    }
+
+    public String logout(String tokenPayload){
+        tokenStore.delete(tokenPayload);
+        return "Logged out... token deleted";
     }
 }
