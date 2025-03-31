@@ -93,53 +93,5 @@ public class ClientApplication {
         System.out.println("Risposta da getAllProducts: "+client.getAllProducts("FakeToken"));
 
 
-
-        /* 
-        RequestDTO requestDTO = new RequestDTO("testUser1", "getAllAccounts");
-        System.out.println(client.checkRequest(requestDTO));
-        requestDTO = new RequestDTO("testUser1", "addProduct");
-        System.out.println(client.checkRequest(requestDTO));
-        requestDTO = new RequestDTO("testUser1", "getAllProducts");
-        System.out.println(client.checkRequest(requestDTO));
-        requestDTO = new RequestDTO("testUser1", "supplyProduct");
-        System.out.println(client.checkRequest(requestDTO));
-        requestDTO = new RequestDTO("testUser1", "getCart");
-        System.out.println(client.checkRequest(requestDTO));
-        requestDTO = new RequestDTO("testUser1", "addCardToAccount");
-        System.out.println(client.checkRequest(requestDTO));
-
-        requestDTO = new RequestDTO("testUser2", "getAllAccounts");
-        System.out.println(client.checkRequest(requestDTO));
-        requestDTO = new RequestDTO("testUser2", "addProduct");
-        System.out.println(client.checkRequest(requestDTO));
-        requestDTO = new RequestDTO("testUser2", "getAllProducts");
-        System.out.println(client.checkRequest(requestDTO));
-        requestDTO = new RequestDTO("testUser2", "supplyProduct");
-        System.out.println(client.checkRequest(requestDTO));
-        requestDTO = new RequestDTO("testUser2", "getCart");
-        System.out.println(client.checkRequest(requestDTO));
-        requestDTO = new RequestDTO("testUser2", "addCardToAccount");
-        System.out.println(client.checkRequest(requestDTO));
-
-        requestDTO = new RequestDTO("testUser3", "getAllAccounts");
-        System.out.println(client.checkRequest(requestDTO));
-        requestDTO = new RequestDTO("testUser3", "addProduct");
-        System.out.println(client.checkRequest(requestDTO));
-        requestDTO = new RequestDTO("testUser3", "getAllProducts");
-        System.out.println(client.checkRequest(requestDTO));
-        requestDTO = new RequestDTO("testUser3", "supplyProduct");
-        System.out.println(client.checkRequest(requestDTO));
-        requestDTO = new RequestDTO("testUser3", "getCart");
-        System.out.println(client.checkRequest(requestDTO));
-        requestDTO = new RequestDTO("testUser3", "addCardToAccount");
-        System.out.println(client.checkRequest(requestDTO));
-        */
-        
-        /* 
-        String accountsResponse = client.getAllAccounts();
-        System.out.println("Risposta da getAllAccounts: " + accountsResponse);
-        System.out.println("Risposta da getAllProducts: " + client.getAllProducts());
-        */
-
     }
 }

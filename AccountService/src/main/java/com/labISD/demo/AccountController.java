@@ -39,7 +39,6 @@ public class AccountController {
     }
     //TO DO: ADD LOGOUT (DESTROY TOKEN)
 
-    
     @PostMapping("/checkRequest")
     public boolean checkRequest(@RequestBody RequestDTO requestDTO){
         return accountService.checkRequest(requestDTO);
