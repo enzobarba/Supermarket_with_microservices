@@ -42,8 +42,9 @@ public class TokenStore {
     public boolean isValidSignature(String id) {
         Optional<Token> o = tokens.stream()
                 .filter(t -> t.payload().equals(id)).findAny();
-        if (o.isEmpty())
+        if (o.isEmpty()){
             return false;
+        }
         return isValidSignature(o.get());
     }
 

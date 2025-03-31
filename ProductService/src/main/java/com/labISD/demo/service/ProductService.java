@@ -1,7 +1,7 @@
 package com.labISD.demo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import com.labISD.demo.dto.ProductDTO;
+import com.labISD.demo.dto.NewProductDTO;
 import com.labISD.demo.enums.CATEGORY;
 import java.util.List;
 import java.util.UUID;
@@ -17,7 +17,7 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
 
-    public String addProduct(ProductDTO productDTO){
+    public String addProduct(NewProductDTO productDTO){
         if(productRepository.findByName(productDTO.name()) != null){
             return "Error: product already exists";
         }

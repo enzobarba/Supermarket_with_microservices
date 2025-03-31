@@ -2,6 +2,7 @@ package com.labISD.demo;
 
 import org.springframework.web.reactive.function.client.WebClient;
 import com.labISD.demo.dto.*;
+import com.labISD.demo.enums.*;
 
 
 public class ClientApplication {
@@ -13,22 +14,13 @@ public class ClientApplication {
     }
 
 
-    public String sendRegistration(RegisterAccountDTO registerAccountDTO) {
- 
+    public String sendRegistration(NewAccountDTO registerAccountDTO) {
         return webClient.post()
                         .uri("/account/registerAccount")  
                         .bodyValue(registerAccountDTO)    
                         .retrieve()                     
                         .bodyToMono(String.class)         
                         .block();                         
-    }
-
-    public String getAllAccounts() {
-        return webClient.get()
-                        .uri("/account/getAllAccounts")  
-                        .retrieve()                    
-                        .bodyToMono(String.class)       
-                        .block();                      
     }
 
     public String login(LoginDTO loginDTO) {
@@ -40,7 +32,7 @@ public class ClientApplication {
                         .block();                      
     }
 
-    public String addProduct(ProductDTO productDTO) {
+    public String addProduct(NewProductDTO productDTO) {
         return webClient.post()
                         .uri("/product/addProduct")  
                         .bodyValue(productDTO)
@@ -49,35 +41,58 @@ public class ClientApplication {
                         .block();                      
     }
 
-    public String getAllProducts() {
-        return webClient.get()
-                        .uri("/product/getAllProducts")  
-                        .retrieve()                    
-                        .bodyToMono(String.class)       
-                        .block();                      
-    }
-
-    public String checkRequest(RequestDTO requestDTO) {
+    public String getAllAccounts(String token) {
         return webClient.post()
-                        .uri("/account/checkRequest").bodyValue(requestDTO)  
+                        .uri("/account/getAllAccounts")  
+                        .bodyValue(token)
                         .retrieve()                    
                         .bodyToMono(String.class)       
                         .block();                      
     }
 
+    public String getAllProducts(String token) {
+        return webClient.post()
+                        .uri("/product/getAllProducts")  
+                        .bodyValue(token)
+                        .retrieve()                    
+                        .bodyToMono(String.class)       
+                        .block();                      
+    }
 
     public static void main(String[] args) {
 
         ClientApplication client = new ClientApplication();
-        RegisterAccountDTO registerDTO = new RegisterAccountDTO("testUser1", "Password123!", "test1@example.com", "Enzo", "Barba", "SUPPLIER");
+        NewAccountDTO registerDTO = new NewAccountDTO("supplier", "Password123!", "test1@example.com", "Enzo", "Barba", "SUPPLIER");
         String registrationResponse = client.sendRegistration(registerDTO);
         System.out.println("Risposta dalla registrazione: " + registrationResponse);
-        registerDTO = new RegisterAccountDTO("testUser2", "Password123!", "test2@example.com", "Enzo", "Barba", "ADMIN");
+        registerDTO = new NewAccountDTO("admin", "Password123!", "test2@example.com", "Enzo", "Barba", "ADMIN");
         registrationResponse = client.sendRegistration(registerDTO);
         System.out.println("Risposta dalla registrazione: " + registrationResponse);
-        registerDTO = new RegisterAccountDTO("testUser3", "Password123!", "test3@example.com", "Enzo", "Barba", null);
+        registerDTO = new NewAccountDTO("purchaser", "Password123!", "test3@example.com", "Enzo", "Barba", null);
         registrationResponse = client.sendRegistration(registerDTO);
         System.out.println("Risposta dalla registrazione: " + registrationResponse);
+
+        String token = client.login(new LoginDTO("supplier", "Password123!"));
+        System.out.println("Risposta da login: " + token);
+        String addProductResponse = client.addProduct(new NewProductDTO(token,"pollo", 2, 22, 1, CATEGORY.Meat));
+        System.out.println("Risposta da addProduct: " + addProductResponse);
+        System.out.println("Risposta da getAllAccounts: "+client.getAllAccounts(token));
+        System.out.println("Risposta da getAllProducts: "+client.getAllProducts(token));
+
+        token = client.login(new LoginDTO("admin", "Password123!"));
+        System.out.println("Risposta da login: " + token);
+        addProductResponse = client.addProduct(new NewProductDTO(token,"pane", 2, 22, 1, CATEGORY.Bread));
+        System.out.println("Risposta da addProduct: " + addProductResponse);
+        System.out.println("Risposta da getAllAccounts: "+client.getAllAccounts(token));
+        System.out.println("Risposta da getAllProducts: "+client.getAllProducts(token));
+
+
+        addProductResponse = client.addProduct(new NewProductDTO("fakeToken","pizza", 2, 22, 1, CATEGORY.Bread));
+        System.out.println("Risposta da addProduct: " + addProductResponse);
+        System.out.println("Risposta da getAllAccounts: "+client.getAllAccounts("fakeToken"));
+        System.out.println("Risposta da getAllProducts: "+client.getAllProducts("FakeToken"));
+
+
 
         /* 
         RequestDTO requestDTO = new RequestDTO("testUser1", "getAllAccounts");
@@ -123,10 +138,6 @@ public class ClientApplication {
         /* 
         String accountsResponse = client.getAllAccounts();
         System.out.println("Risposta da getAllAccounts: " + accountsResponse);
-        String token = client.login(new LoginDTO("testUser", "Password123!"));
-        System.out.println("Risposta da login: " + token);
-        String addProductResponse = client.addProduct(new ProductDTO("pollo", 2, 22, 1, CATEGORY.Meat));
-        System.out.println("Risposta da addProduct: " + addProductResponse);
         System.out.println("Risposta da getAllProducts: " + client.getAllProducts());
         */
 

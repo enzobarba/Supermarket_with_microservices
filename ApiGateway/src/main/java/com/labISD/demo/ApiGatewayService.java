@@ -11,7 +11,7 @@ public class ApiGatewayService {
     @Autowired
     private WebClient.Builder webClientBuilder;
 
-    public String registerAccount(RegisterAccountDTO registerAccountDTO){
+    public String registerAccount(NewAccountDTO registerAccountDTO){
         return webClientBuilder.build()
         .post().uri("http://account:9090/registerAccount")
         .bodyValue(registerAccountDTO)
@@ -25,37 +25,72 @@ public class ApiGatewayService {
         .retrieve().bodyToMono(String.class).block(); 
     }
 
-    public String getAllAccounts(){
-        return webClientBuilder.build()
-        .get()
-        .uri("http://account:9090/getAllAccounts")
-        .retrieve().bodyToMono(String.class).block(); 
-    }
-    
-    public String checkRequest(RequestDTO requestDTO){
-        boolean permission = webClientBuilder.build()
-        .post().uri("http://account:9090/checkRequest")
-        .bodyValue(requestDTO)
-        .retrieve().bodyToMono(Boolean.class).block(); 
-        if(permission == true){
-            return String.format("Operation %s requested by %s: ALLOWED",requestDTO.request(), requestDTO.username());
+    public String addProduct(NewProductDTO productDTO){
+        String checkAuthAuth = checkAuthAuth(productDTO.token(), "addProduct");
+        if(!checkAuthAuth.equals("OK")){
+            return checkAuthAuth;
         }
-        return String.format("Operation %s requested by %s: DENIED",requestDTO.request(), requestDTO.username());
-    }
-
-    public String addProduct(ProductDTO productDTO){
         return webClientBuilder.build()
         .post()
         .uri("http://product:9091/addProduct").bodyValue(productDTO)
         .retrieve().bodyToMono(String.class).block(); 
     }
 
-    public String getAllProducts(){
+    public String getAllAccounts(String token){
+        String checkAuthAuth = checkAuthAuth(token, "getAllAccounts");
+        if(!checkAuthAuth.equals("OK")){
+            return checkAuthAuth;
+        }
+        return webClientBuilder.build()
+        .get()
+        .uri("http://account:9090/getAllAccounts")
+        .retrieve().bodyToMono(String.class).block(); 
+    }
+
+    public String getAllProducts(String token){
+        String checkAuthAuth = checkAuthAuth(token, "getAllProducts");
+        if(!checkAuthAuth.equals("OK")){
+            return checkAuthAuth;
+        }
         return webClientBuilder.build()
         .get()
         .uri("http://product:9091/getAllProducts")
         .retrieve().bodyToMono(String.class).block(); 
     }
 
-   
+    private String checkAuthAuth(String token, String request){
+        boolean authenticated = checkToken(token);
+        if(!authenticated){
+            return "Authentication ERROR: token not valid";
+        }
+        boolean authorized = checkRequest(token, request);
+        if(!authorized){
+            return String.format("Authorization ERROR: [%s] operation  NOT ALLOWED", request);
+        }
+        return "OK";
+    }
+
+    private boolean checkToken(String token){
+        return webClientBuilder.build()
+        .post().uri("http://account:9090/checkToken")
+        .bodyValue(token)
+        .retrieve().bodyToMono(Boolean.class).block(); 
+    }
+    
+    private boolean checkRequest(String token, String request){
+        String username = getUserByToken(token);
+        RequestDTO requestDTO = new RequestDTO(username, request);
+        return webClientBuilder.build()
+        .post().uri("http://account:9090/checkRequest")
+        .bodyValue(requestDTO)
+        .retrieve().bodyToMono(Boolean.class).block(); 
+    }
+
+    private String getUserByToken(String token){
+        return webClientBuilder.build()
+        .post().uri("http://account:9090/getUserByToken")
+        .bodyValue(token)
+        .retrieve().bodyToMono(String.class).block(); 
+    }
+
 }

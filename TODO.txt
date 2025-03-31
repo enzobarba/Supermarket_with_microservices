@@ -1,5 +1,3 @@
-- rbac
-- implementare ServerGateway  (entity per Audit?, request generiche con token, string request e un certo DTO (centralizzate in unico metodo, ma cambiano i DTO???))
 - catena Client-Server (test Junit senza interazione utente)
 - controlli chiamate, risposte ok/error, vincoli ridondanti da sistemare (@Validated in DTO?)
 - in catena Client-Server ci va remote proxy? Guardare codici prof... in client mettere Proxy per controlli preliminari richieste?
@@ -8,6 +6,7 @@
 - RateLimiter in ApiGateway
 
 - distinguere getAllProducts tra Purchaser e Supplier, rivedere permessi ad Admin
+- Controllare firma in controllo token
 - logger di richieste al server (AUDIT?)
 - Session state per carrello utenti non loggati 
 - passare da DB in memoria (H2) a DB su disco (MySQL ?)

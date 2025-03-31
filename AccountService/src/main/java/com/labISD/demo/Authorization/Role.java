@@ -1,4 +1,4 @@
-package com.labISD.demo.Permission;
+package com.labISD.demo.Authorization;
 
 import java.util.List;
 

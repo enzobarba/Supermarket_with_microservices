@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import com.labISD.demo.dto.*;
 import com.labISD.demo.Authentication.*;
-import com.labISD.demo.Permission.PageController;
+import com.labISD.demo.Authorization.PageController;
 import com.lambdaworks.crypto.SCryptUtil;
 import com.labISD.demo.enums.ROLE;
 import java.util.UUID;
@@ -30,7 +30,7 @@ public class AccountService {
         this.webClientBuilder = webClientBuilder;
     }
 
-    public String registerAccount(RegisterAccountDTO registerAccountDTO) {
+    public String registerAccount(NewAccountDTO registerAccountDTO) {
         String username = registerAccountDTO.username();
         String passwd = registerAccountDTO.passwd();
         String inviteCode = registerAccountDTO.inviteCode();
@@ -91,11 +91,16 @@ public class AccountService {
     }
 
     public boolean checkToken(String tokenPayload){
-        boolean validToken = false;
-        if(tokenStore.isPresent(tokenPayload) && tokenStore.isValidSignature(tokenPayload)){
-            validToken = true;
+        boolean isTokenValid = false;
+        if(tokenStore.isPresent(tokenPayload)){
+            isTokenValid = true;
         }
-        return validToken;
+        //System.out.println(tokenStore.isValidSignature(tokenPayload));
+        return isTokenValid;
+    }
+
+    public String getUserByToken(String tokenPayload){
+        return tokenStore.findUser(tokenPayload);
     }
 
     public String getAllAccounts(){

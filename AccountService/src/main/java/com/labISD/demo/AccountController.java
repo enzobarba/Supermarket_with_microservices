@@ -14,13 +14,8 @@ public class AccountController {
     private AccountService accountService;
 
     @PostMapping("/registerAccount")
-    public String registerAccount(@RequestBody RegisterAccountDTO registerAccountDTO){
+    public String registerAccount(@RequestBody NewAccountDTO registerAccountDTO){
         return accountService.registerAccount(registerAccountDTO);
-    }
-
-    @GetMapping("/getAllAccounts")
-    public String getAllAccounts(){
-        return accountService.getAllAccounts();
     }
 
     @PostMapping ("/login")
@@ -28,12 +23,22 @@ public class AccountController {
         return accountService.login(loginDTO);
     }
 
-    //TO DO: ADD LOGOUT (DESTROY TOKEN)
-
     @PostMapping("/checkToken")
     public boolean checkToken(@RequestBody String token){
         return accountService.checkToken(token);
     }
+
+    @PostMapping("/getUserByToken")
+    public String getUserByToken(@RequestBody String token){
+        return accountService.getUserByToken(token);
+    }
+
+    @GetMapping("/getAllAccounts")
+    public String getAllAccounts(){
+        return accountService.getAllAccounts();
+    }
+    //TO DO: ADD LOGOUT (DESTROY TOKEN)
+
     
     @PostMapping("/checkRequest")
     public boolean checkRequest(@RequestBody RequestDTO requestDTO){

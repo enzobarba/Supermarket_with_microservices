@@ -3,12 +3,10 @@ package com.labISD.demo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.labISD.demo.dto.RegisterAccountDTO;
-import com.labISD.demo.dto.RequestDTO;
+import com.labISD.demo.dto.NewAccountDTO;
 import com.labISD.demo.dto.LoginDTO;
-import com.labISD.demo.dto.ProductDTO;
+import com.labISD.demo.dto.NewProductDTO;
 
 @RestController
 public class ApiGatewayController {
@@ -17,13 +15,8 @@ public class ApiGatewayController {
     ApiGatewayService apiGatewayService;
     
     @PostMapping("/account/registerAccount")
-    public String registerAccount(@RequestBody RegisterAccountDTO registerAccountDTO){
+    public String registerAccount(@RequestBody NewAccountDTO registerAccountDTO){
         return apiGatewayService.registerAccount(registerAccountDTO);
-    }
-
-    @GetMapping("/account/getAllAccounts")
-    public String getAllAccounts(){
-        return apiGatewayService.getAllAccounts();
     }
 
     @PostMapping("/account/login")
@@ -31,20 +24,19 @@ public class ApiGatewayController {
         return apiGatewayService.login(loginDTO);
     }
 
-    @PostMapping("/account/checkRequest")
-    public String checkRequest(@RequestBody RequestDTO requestDTO){
-        return apiGatewayService.checkRequest(requestDTO);
-    }
-
-
     @PostMapping("/product/addProduct")
-    public String addProduct(@RequestBody ProductDTO productDTO){
+    public String addProduct(@RequestBody NewProductDTO productDTO){
         return apiGatewayService.addProduct(productDTO);
     }
 
-    @GetMapping("/product/getAllProducts")
-    public String getAllProducts(){
-        return apiGatewayService.getAllProducts();
+    @PostMapping("/account/getAllAccounts")
+    public String getAllAccounts(@RequestBody String token){
+        return apiGatewayService.getAllAccounts(token);
     }
-    
+
+    @PostMapping("/product/getAllProducts")
+    public String getAllProducts(@RequestBody String token){
+        return apiGatewayService.getAllProducts(token);
+    }
+
 }
