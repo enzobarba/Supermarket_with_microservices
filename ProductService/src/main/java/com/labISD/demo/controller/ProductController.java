@@ -1,9 +1,9 @@
 package com.labISD.demo.controller;
 
-import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,7 +28,7 @@ public class ProductController {
 	}
 
 	@GetMapping("/getSortedProductsByRatingDesc")
-	public String getSortedProducts(){
+	public String getSortedProductsByRatingDesc(){
 		return productService.getSortedProductsByRatingDesc();
 	}
 
@@ -37,14 +37,14 @@ public class ProductController {
 		return productService.getProductsByCategory(category);
 	}
 
-	@GetMapping("/supplyProduct")
-	public void supplyProduct(@RequestParam(value = "id") UUID id, @RequestParam(value = "q") int q){
-		productService.supplyProduct(id, q);
+	@PutMapping("/supplyProduct")
+	public String supplyProduct(@RequestBody SupplyProductDTO supplyProductDTO){
+		return productService.supplyProduct(supplyProductDTO);
 	}
 
-	@GetMapping("/rateProduct")
-	public void rateProduct(@RequestParam(value = "id") UUID id, @RequestParam(value = "r") int r){
-		productService.rateProduct(id, r);
+	@PutMapping("/rateProduct")
+	public String rateProduct(@RequestBody RateProductDTO rateProductDTO){
+		return productService.rateProduct(rateProductDTO);
 	}
 
 }

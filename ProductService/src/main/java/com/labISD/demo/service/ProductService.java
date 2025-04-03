@@ -2,11 +2,12 @@ package com.labISD.demo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import com.labISD.demo.dto.NewProductDTO;
+import com.labISD.demo.dto.RateProductDTO;
+import com.labISD.demo.dto.SupplyProductDTO;
 import com.labISD.demo.enums.CATEGORY;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.data.domain.Sort;
-import java.util.Optional;
 import org.springframework.stereotype.Service;
 import com.labISD.demo.repository.ProductRepository;
 import com.labISD.demo.domain.Product;
@@ -49,21 +50,31 @@ public class ProductService {
         return productRepository.findAll(Sort.by(Sort.Order.desc("rating"))).toString();
     }
 
-    public void supplyProduct(UUID id, int quantity){
-        Optional <Product> product = productRepository.findById(id);
-        product.ifPresent(p -> {p.supply(quantity);
-                        productRepository.save(p);
-        });
+    public String supplyProduct(SupplyProductDTO supplyProductDTO){
+        Product product = productRepository.findByName(supplyProductDTO.name());
+        if(product == null){
+            return "ERROR: product not found";
+        }
+        product.supply(supplyProductDTO.quantity());
+        productRepository.save(product);
+        return String.format("[%s] product successfully supplied", supplyProductDTO.name());
     }
 
-    public void rateProduct(UUID id, int rating){
-        Optional <Product> product = productRepository.findById(id);
-        product.ifPresent(p -> {p.addRating(rating);
-                        productRepository.save(p);
-        });
+    public String rateProduct(RateProductDTO rateProductDTO){
+        Product product = productRepository.findByName(rateProductDTO.name());
+        if(product == null){
+            return "ERROR: product not found";
+        }
+        product.addRating(rateProductDTO.rate());
+        productRepository.save(product);
+        return String.format("[%s] product successfully rated", rateProductDTO.name());
     }
 
     public void saveProduct(Product product){
         productRepository.save(product);
+    }
+
+    public UUID getProductIdByName(String name){
+        return productRepository.findByName(name).getId();
     }
 }

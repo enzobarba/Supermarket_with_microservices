@@ -2,9 +2,14 @@ package com.labISD.demo.controller;
 
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.labISD.demo.dto.NewCartItemDTO;
 import com.labISD.demo.service.PurchaseService;
 
 @RestController
@@ -28,23 +33,23 @@ public class PurchaseController {
         purchaseService.createCart(userId);
     }
 
-    @GetMapping("/addItemToCart")
-    public void addItemToCart(@RequestParam(value = "userId") UUID userId, @RequestParam(value = "productId") UUID productId, @RequestParam(value = "q") int q){
-        purchaseService.addItemToCart(userId, productId, q);
+    @PostMapping("/addItemToCart")
+    public String addItemToCart(@RequestParam(value = "userId") UUID userId, @RequestBody NewCartItemDTO newCartItemDTO){
+        return purchaseService.addItemToCart(userId, newCartItemDTO);
     }
 
-    @GetMapping("/removeItemFromCart")
-    public void removeItemFromCart(@RequestParam(value = "userId") UUID userId, @RequestParam(value = "productId") UUID productId){
-        purchaseService.removeItemFromCart(userId, productId);
+    @DeleteMapping("/removeItemFromCart")
+    public String removeItemFromCart(@RequestParam(value = "userId") UUID userId, @RequestParam(value = "productName") String productName){
+        return purchaseService.removeItemFromCart(userId, productName);
     }
 
-    @GetMapping("/clearCart")
-    public void clearCart(@RequestParam(value = "userId") UUID userId){
-        purchaseService.clearCart(userId);
+    @DeleteMapping("/clearCart")
+    public String clearCart(@RequestParam (value = "userId") UUID userId){
+        return purchaseService.clearCart(userId);
     }  
     
-    @GetMapping("/checkout")
-    public String checkout(@RequestParam(value = "userId") UUID userId, @RequestParam(value = "cardId") UUID cardId){
-        return purchaseService.checkout(userId, cardId);
+    @PostMapping("/checkout")
+    public String checkout(@RequestParam(value = "userId") UUID userId, @RequestBody String cardNumber){
+        return purchaseService.checkout(userId, cardNumber);
     }
 }

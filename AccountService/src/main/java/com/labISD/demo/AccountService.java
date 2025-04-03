@@ -102,6 +102,11 @@ public class AccountService {
         return tokenStore.findUser(tokenPayload);
     }
 
+    public UUID getUserIdByToken(String tokenPayload){
+        String username = tokenStore.findUser(tokenPayload);
+        return accountRepository.findByUsername(username).getId();
+    }
+
     public String getAllAccounts(){
         List <Account> accounts = accountRepository.findAll();
         if(accounts.size() == 0){

@@ -26,16 +26,10 @@ public class CreditCardService {
         return "Credit card successfully added";
     }
 
-    private boolean isValidExpirationDate(String expirationDate) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/yy");
-        YearMonth expDate = YearMonth.parse(expirationDate, formatter);
-        return expDate.isAfter(YearMonth.now()); 
-    }
-
     public boolean spendMoneyFromCard(PaymentDTO paymentDTO){
         //check first if card exists (different method called by cartService)
         boolean canSpend = false;
-        CreditCard creditCard = creditCardRepository.findById(paymentDTO.cardId()).get();
+        CreditCard creditCard = creditCardRepository.findByNumber(paymentDTO.cardNumber());
         if(creditCard.canSpendMoney(paymentDTO.amount())){
             creditCard.spendMoney(paymentDTO.amount());
             canSpend = true;
@@ -50,5 +44,11 @@ public class CreditCardService {
             return "no credit cards";
         }
         return creditCards.toString();
+    }
+
+    private boolean isValidExpirationDate(String expirationDate) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/yy");
+        YearMonth expDate = YearMonth.parse(expirationDate, formatter);
+        return expDate.isAfter(YearMonth.now()); 
     }
 }

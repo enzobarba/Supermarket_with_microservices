@@ -73,7 +73,7 @@ public class Purchase {
         totalAmount+= quantity*product.getPrice();
     }
 
-    public void removeItem(UUID productId){
+    public boolean removeItem(UUID productId){
         PurchaseItem itemToRemove = items.stream()
         .filter(item -> item.getProduct().getId().equals(productId))
         .findFirst()
@@ -81,7 +81,9 @@ public class Purchase {
         if(itemToRemove!= null){
             items.remove(itemToRemove);
             totalAmount-= itemToRemove.getTotalPrice();
+            return true;
         }
+        return false;
     }
 
     public void clear(){

@@ -36,37 +36,46 @@ public class PurchaseService {
         purchaseRepository.save(purchase);
     }
         
-    public void addItemToCart(UUID userId, UUID productId, int quantity) {
+    public String addItemToCart(UUID userId, NewCartItemDTO newCartItemDTO) {
         Purchase cart = getCart(userId);
+        UUID productId = productService.getProductIdByName(newCartItemDTO.name());
         PurchaseItem cartItem = cart.getItems().stream()
         .filter(item -> item.getId().equals(productId))
         .findFirst()
         .orElse(null);
-        int totalQuantity = quantity;
+        int totalQuantity = newCartItemDTO.quantity();
         if(cartItem != null){
             totalQuantity+= cartItem.getQuantity();
         }
         Product product = productService.getProductById(productId);
         if(product.quantityAvailable(totalQuantity)){
-            cart.addItemToCart(product, quantity);
+            cart.addItemToCart(product, newCartItemDTO.quantity());
             purchaseRepository.save(cart);
+            return "product successfully added to cart";
         }
+        return "ERROR adding product to cart: quantity non available";
     }
     
-    public void removeItemFromCart(UUID userId, UUID productId) {
+    public String removeItemFromCart(UUID userId, String productName) {
+        UUID productId = productService.getProductIdByName(productName);
         Purchase cart = purchaseRepository.findByUserIdAndStatus(userId, ORDERSTATUS.CART).getFirst();
-        cart.removeItem(productId);
-        purchaseRepository.save(cart);
+        boolean productFoundInCart = cart.removeItem(productId);
+        if(productFoundInCart){
+            purchaseRepository.save(cart);
+            return "product successfully deleted form cart";
+        }
+        return "ERROR deleting product from cart: product not found";
     }
     
-    public void clearCart(UUID userId) {
+    public String clearCart(UUID userId) {
         Purchase cart = purchaseRepository.findByUserIdAndStatus(userId, ORDERSTATUS.CART).getFirst();
         cart.clear();
         purchaseRepository.save(cart);
+        return "Cart successfully cleared";
     }
 
     //TO DO: auth for use a card
-    public String checkout(UUID userId, UUID cardId){
+    public String checkout(UUID userId, String cardNumber){
         Purchase cart = purchaseRepository.findByUserIdAndStatus(userId, ORDERSTATUS.CART).getFirst();
         if(cart.isEmpty()){
             return "add Products first!";
@@ -75,7 +84,7 @@ public class PurchaseService {
         if(!productsAvailable){
             return "quantities not available";
         }
-        boolean canSpend = pay(new PaymentDTO(cardId, cart.getTotalAmount()));
+        boolean canSpend = pay(new PaymentDTO(cardNumber, cart.getTotalAmount()));
         if(!canSpend){
             return "not enough money on credit card";
         }
