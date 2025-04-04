@@ -1,4 +1,4 @@
-package com.labISD.demo;
+package com.labISD.demo.domain;
 
 import java.util.UUID;
 import jakarta.persistence.Entity;
