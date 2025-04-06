@@ -39,6 +39,9 @@ public class PurchaseService {
     public String addItemToCart(UUID userId, NewCartItemDTO newCartItemDTO) {
         Purchase cart = getCart(userId);
         UUID productId = productService.getProductIdByName(newCartItemDTO.name());
+        if(productId == null){
+            return "ERROR adding product to cart: product not found";
+        }
         PurchaseItem cartItem = cart.getItems().stream()
         .filter(item -> item.getId().equals(productId))
         .findFirst()
@@ -74,23 +77,23 @@ public class PurchaseService {
         return "Cart successfully cleared";
     }
 
-    //TO DO: auth for use a card
     public String checkout(UUID userId, String cardNumber){
         Purchase cart = purchaseRepository.findByUserIdAndStatus(userId, ORDERSTATUS.CART).getFirst();
         if(cart.isEmpty()){
-            return "add Products first!";
+            return "ERROR: cart is empty!";
         }
         boolean productsAvailable = checkProductsAvailability(cart);
         if(!productsAvailable){
-            return "quantities not available";
+            return "ERROR: quantities not available";
         }
         boolean canSpend = pay(new PaymentDTO(cardNumber, cart.getTotalAmount()));
         if(!canSpend){
-            return "not enough money on credit card";
+            return "ERROR: not enough money on credit card";
         }
-        cart.setStatus(ORDERSTATUS.ORDER);
         decreaseProductsQuantity(cart);
-        clearCart(userId);
+        cart.setStatus(ORDERSTATUS.ORDER);
+        purchaseRepository.save(cart);
+        createCart(userId);
         return "purchase made successfully!";
     }
 

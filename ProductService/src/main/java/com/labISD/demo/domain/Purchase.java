@@ -97,4 +97,9 @@ public class Purchase {
         }
         return false;
     }
+
+    @Override
+    public String toString(){
+        return items.toString();
+    }
 }

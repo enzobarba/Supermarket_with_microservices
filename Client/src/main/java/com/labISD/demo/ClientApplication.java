@@ -1,98 +1,63 @@
 package com.labISD.demo;
 
-import org.springframework.web.reactive.function.client.WebClient;
 import com.labISD.demo.dto.*;
 import com.labISD.demo.enums.*;
 
 
 public class ClientApplication {
 
-    private final WebClient webClient;
+    private ClientDispatcher clientDispatcher;
 
-    public ClientApplication() {
-        this.webClient = WebClient.builder().baseUrl("http://localhost:8080").build();
-    }
-
-
-    public String sendRegistration(NewAccountDTO registerAccountDTO) {
-        return webClient.post()
-                        .uri("/account/registerAccount")  
-                        .bodyValue(registerAccountDTO)    
-                        .retrieve()                     
-                        .bodyToMono(String.class)         
-                        .block();                         
-    }
-
-    public String login(LoginDTO loginDTO) {
-        return webClient.post()
-                        .uri("/account/login")  
-                        .bodyValue(loginDTO)
-                        .retrieve()                    
-                        .bodyToMono(String.class)       
-                        .block();                      
-    }
-
-    public String addProduct(String token, NewProductDTO productDTO) {
-        return webClient.post()
-                        .uri("/product/addProduct")  
-                        .header("Authorization", token) 
-                        .bodyValue(productDTO)
-                        .retrieve()                    
-                        .bodyToMono(String.class)       
-                        .block();                      
-    }
-
-    public String getAllAccounts(String token) {
-        return webClient.get()
-                        .uri("/account/getAllAccounts")  
-                        .header("Authorization", token) 
-                        .retrieve()                    
-                        .bodyToMono(String.class)       
-                        .block();                      
-    }
-
-    public String getAllProducts(String token) {
-        return webClient.get()
-                        .uri("/product/getAllProducts")  
-                        .header("Authorization", token) 
-                        .retrieve()                    
-                        .bodyToMono(String.class)       
-                        .block();                      
+    public ClientApplication(){
+        this.clientDispatcher = new ClientDispatcher();
     }
 
     public static void main(String[] args) {
-
         ClientApplication client = new ClientApplication();
-        NewAccountDTO registerDTO = new NewAccountDTO("supplier", "Password123!", "test1@example.com", "Enzo", "Barba", "SUPPLIER");
-        String registrationResponse = client.sendRegistration(registerDTO);
-        System.out.println("Risposta dalla registrazione: " + registrationResponse);
-        registerDTO = new NewAccountDTO("admin", "Password123!", "test2@example.com", "Enzo", "Barba", "ADMIN");
-        registrationResponse = client.sendRegistration(registerDTO);
-        System.out.println("Risposta dalla registrazione: " + registrationResponse);
-        registerDTO = new NewAccountDTO("purchaser", "Password123!", "test3@example.com", "Enzo", "Barba", null);
-        registrationResponse = client.sendRegistration(registerDTO);
-        System.out.println("Risposta dalla registrazione: " + registrationResponse);
 
-        String token = client.login(new LoginDTO("supplier", "Password123!"));
-        System.out.println("Risposta da login: " + token);
-        String addProductResponse = client.addProduct(token, new NewProductDTO("pollo", 2, 22, 1, CATEGORY.Meat));
-        System.out.println("Risposta da addProduct: " + addProductResponse);
-        System.out.println("Risposta da getAllAccounts: "+client.getAllAccounts(token));
-        System.out.println("Risposta da getAllProducts: "+client.getAllProducts(token));
+        System.out.println(client.clientDispatcher.request(REQUEST_TYPE.REGISTER_ACCOUNT, 
+        new NewAccountDTO("enzo2709", "adSss23!", "enzo1334@gmail.com", "Enzo", "Barba", null), null, null));
 
-        token = client.login(new LoginDTO("admin", "Password123!"));
-        System.out.println("Risposta da login: " + token);
-        addProductResponse = client.addProduct(token, new NewProductDTO("pollo", 2, 22, 1, CATEGORY.Meat));
-        System.out.println("Risposta da addProduct: " + addProductResponse);
-        System.out.println("Risposta da getAllAccounts: "+client.getAllAccounts(token));
-        System.out.println("Risposta da getAllProducts: "+client.getAllProducts(token));
+        System.out.println(client.clientDispatcher.request(REQUEST_TYPE.REGISTER_ACCOUNT, 
+        new NewAccountDTO("enzoSuppl", "adSss23!", "enzo1335@gmail.com", "Enzo", "Barba", "SUPPLIER"), null, null));
 
+        String tokenP = client.clientDispatcher.request(REQUEST_TYPE.LOGIN, 
+                        new LoginDTO("enzo2709","adSss23!"), null, null);
 
-        addProductResponse = client.addProduct("fakeToken", new NewProductDTO("pollo", 2, 22, 1, CATEGORY.Meat));
-        System.out.println("Risposta da addProduct: " + addProductResponse);
-        System.out.println("Risposta da getAllAccounts: "+client.getAllAccounts("fakeToken"));
-        System.out.println("Risposta da getAllProducts: "+client.getAllProducts("FakeToken"));
+        String tokenS = client.clientDispatcher.request(REQUEST_TYPE.LOGIN, 
+                        new LoginDTO("enzoSuppl","adSss23!"), null, null);
+        
+        System.out.println(client.clientDispatcher.request(REQUEST_TYPE.ADD_PRODUCT,
+                        new NewProductDTO("spaghetti",1,20,2,CATEGORY.Pasta), tokenS, null));
+        
+        System.out.println(client.clientDispatcher.request(REQUEST_TYPE.SUPPLY_PRODUCT,
+                        new SupplyProductDTO("spaghetti",30), tokenS, null));
 
+        System.out.println(client.clientDispatcher.request(REQUEST_TYPE.ADD_PRODUCT,
+                        new NewProductDTO("fusilli",1,20,2,CATEGORY.Pasta), tokenS, null));
+        
+        System.out.println(client.clientDispatcher.request(REQUEST_TYPE.ADD_PRODUCT,
+                        new NewProductDTO("gamberoni",1,20,2,CATEGORY.Frozen), tokenS, null));
 
+        System.out.println(client.clientDispatcher.request(REQUEST_TYPE.GET_ALL_PRODUCTS,
+                        null, tokenP, null));
+
+        System.out.println(client.clientDispatcher.request(REQUEST_TYPE.ADD_ITEM_TO_CART,
+                        new NewCartItemDTO("spaghetti",11), tokenP, null));
+
+        System.out.println(client.clientDispatcher.request(REQUEST_TYPE.GET_CART,
+                        null, tokenP, null));
+
+        System.out.println(client.clientDispatcher.request(REQUEST_TYPE.ADD_CARD_TO_ACCOUNT,
+                        new NewCreditCardDTO("1111000011110000", "MASTERCARD","03/29",100), tokenP, null));
+
+        System.out.println(client.clientDispatcher.request(REQUEST_TYPE.CHECKOUT,
+                        "1111000011110000", tokenP, null));
+
+        System.out.println(client.clientDispatcher.request(REQUEST_TYPE.GET_CART,
+                        null, tokenP, null));
+        
+        System.out.println(client.clientDispatcher.request(REQUEST_TYPE.GET_ALL_PRODUCTS,
+                        null, tokenP, null));
     }
 }

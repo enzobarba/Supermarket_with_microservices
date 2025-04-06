@@ -75,6 +75,10 @@ public class ProductService {
     }
 
     public UUID getProductIdByName(String name){
-        return productRepository.findByName(name).getId();
+        Product p = productRepository.findByName(name);
+        if(p != null){
+            return p.getId();
+        }
+        return null;
     }
 }
