@@ -7,6 +7,7 @@ import com.labISD.demo.domain.*;
 import com.labISD.demo.dto.*;
 import com.labISD.demo.enums.ORDERSTATUS;
 import com.labISD.demo.repository.PurchaseRepository;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
@@ -43,7 +44,7 @@ public class PurchaseService {
             return "ERROR adding product to cart: product not found";
         }
         PurchaseItem cartItem = cart.getItems().stream()
-        .filter(item -> item.getId().equals(productId))
+        .filter(item -> item.getProduct().getId().equals(productId))
         .findFirst()
         .orElse(null);
         int totalQuantity = newCartItemDTO.quantity();
@@ -86,12 +87,17 @@ public class PurchaseService {
         if(!productsAvailable){
             return "ERROR: quantities not available";
         }
+        boolean cardExists = cardExists(cardNumber);
+        if(!cardExists){
+            return "ERROR: credit card not valid";
+        }
         boolean canSpend = pay(new PaymentDTO(cardNumber, cart.getTotalAmount()));
         if(!canSpend){
             return "ERROR: not enough money on credit card";
         }
         decreaseProductsQuantity(cart);
         cart.setStatus(ORDERSTATUS.ORDER);
+        cart.setOrderedAt(LocalDateTime.now());
         purchaseRepository.save(cart);
         createCart(userId);
         return "purchase made successfully!";
@@ -112,6 +118,13 @@ public class PurchaseService {
         return webClientBuilder.build()
             .post().uri("http://creditCard:9092/spendMoneyFromCard")
             .bodyValue(paymentDTO)
+            .retrieve().bodyToMono(Boolean.class).block(); 
+    }
+
+    private boolean cardExists(String number) {
+        return webClientBuilder.build()
+            .post().uri("http://creditCard:9092/cardExists")
+            .bodyValue(number)
             .retrieve().bodyToMono(Boolean.class).block(); 
     }
 

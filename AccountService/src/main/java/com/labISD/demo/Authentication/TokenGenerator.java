@@ -1,4 +1,4 @@
-package com.labISD.demo.Authentication;
+package com.labISD.demo.authentication;
 
 import java.nio.charset.StandardCharsets;
 import java.security.*;

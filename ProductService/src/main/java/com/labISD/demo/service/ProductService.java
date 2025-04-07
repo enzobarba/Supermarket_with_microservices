@@ -35,7 +35,7 @@ public class ProductService {
         if(products.size() == 0){
             return "no products";
         }
-        return products.toString();
+        return printProducts(products);
     }
 
     public String getProductsByCategory(CATEGORY category){
@@ -43,11 +43,15 @@ public class ProductService {
         if(products.size() == 0){
             return "no "+category+" products";
         }
-        return products.toString();
+        return printProducts(products);
     }
 
     public String getSortedProductsByRatingDesc(){
-        return productRepository.findAll(Sort.by(Sort.Order.desc("rating"))).toString();
+        List <Product> products = productRepository.findAll(Sort.by(Sort.Order.desc("rating")));
+        if(products.size() == 0){
+            return "no products";
+        }
+        return printProducts(products);
     }
 
     public String supplyProduct(SupplyProductDTO supplyProductDTO){
@@ -57,7 +61,7 @@ public class ProductService {
         }
         product.supply(supplyProductDTO.quantity());
         productRepository.save(product);
-        return String.format("[%s] product successfully supplied", supplyProductDTO.name());
+        return String.format("product successfully supplied", supplyProductDTO.name());
     }
 
     public String rateProduct(RateProductDTO rateProductDTO){
@@ -80,5 +84,13 @@ public class ProductService {
             return p.getId();
         }
         return null;
+    }
+
+    private String printProducts(List <Product> products){
+        String print = "Products found:";
+        for(int i = 0; i < products.size(); i++){
+            print+= String.format("\n%d) %s", (i+1), products.get(i).toString());
+        }
+        return print;
     }
 }

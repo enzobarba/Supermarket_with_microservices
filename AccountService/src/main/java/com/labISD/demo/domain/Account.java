@@ -1,4 +1,4 @@
-package com.labISD.demo;
+package com.labISD.demo.domain;
 
 import java.util.UUID;
 import jakarta.persistence.Column;
@@ -56,6 +56,6 @@ public class Account {
 
     @Override
     public String toString(){
-        return String.format("ID: %s, Username: %s, Role: %s, Name: %s, Surname: %s, Email: %s", id, username, role, name, surname, email);
+        return String.format("Username: %s, Role: %s, Name: %s, Surname: %s, Email: %s", username, role, name, surname, email);
     }
 }

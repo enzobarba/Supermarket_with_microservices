@@ -1,13 +1,15 @@
-package com.labISD.demo;
+package com.labISD.demo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import com.labISD.demo.dto.*;
-import com.labISD.demo.Authentication.*;
-import com.labISD.demo.Authorization.PageController;
+import com.labISD.demo.authentication.*;
+import com.labISD.demo.authorization.PageController;
+import com.labISD.demo.domain.Account;
 import com.lambdaworks.crypto.SCryptUtil;
 import com.labISD.demo.enums.ROLE;
+import com.labISD.demo.repository.AccountRepository;
 import java.util.UUID;
 import java.util.List;
 
@@ -55,27 +57,6 @@ public class AccountService {
         return "Account successfully created";
     }
 
-    private ROLE getRole(String inviteCode){
-        ROLE role = null;
-        if(inviteCode == null){
-            role = ROLE.purchaser;
-        }
-        else if(inviteCode.equals("ADMIN")){
-            role = ROLE.admin;
-        }
-        else if(inviteCode.equals("SUPPLIER")){
-            role = ROLE.supplier;
-        }
-        return role;
-
-    }
-
-    private void createCart(UUID userId) {
-        webClientBuilder.build()
-            .get().uri("http://product:9091/createCart?userId="+userId)
-            .retrieve().toBodilessEntity().block(); 
-    }
-
     //TO DO: FIX RETURN VALUE
     public String login(LoginDTO loginDTO) {
         Account account = accountRepository.findByUsername(loginDTO.username());
@@ -112,7 +93,11 @@ public class AccountService {
         if(accounts.size() == 0){
             return "No accounts";
         }
-        return accounts.toString();
+        String printAccounts = "Accounts found:";
+        for(int i = 0; i < accounts.size(); i++){
+            printAccounts+= String.format("\n%d) %s",(i+1),accounts.get(i).toString());
+        }
+        return printAccounts;
     }
 
     public boolean checkRequest(RequestDTO requestDTO){
@@ -123,5 +108,25 @@ public class AccountService {
     public String logout(String tokenPayload){
         tokenStore.delete(tokenPayload);
         return "Logged out... token deleted";
+    }
+
+    private ROLE getRole(String inviteCode){
+        ROLE role = null;
+        if(inviteCode == null){
+            role = ROLE.purchaser;
+        }
+        else if(inviteCode.equals("ADMIN")){
+            role = ROLE.admin;
+        }
+        else if(inviteCode.equals("SUPPLIER")){
+            role = ROLE.supplier;
+        }
+        return role;
+    }
+
+    private void createCart(UUID userId) {
+        webClientBuilder.build()
+            .get().uri("http://product:9091/createCart?userId="+userId)
+            .retrieve().toBodilessEntity().block(); 
     }
 }

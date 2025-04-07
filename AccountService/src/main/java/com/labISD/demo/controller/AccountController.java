@@ -1,4 +1,4 @@
-package com.labISD.demo;
+package com.labISD.demo.controller;
 
 import java.util.UUID;
 
@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.labISD.demo.dto.*;
+import com.labISD.demo.service.AccountService;
 
 @RestController
 public class AccountController {

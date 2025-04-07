@@ -52,6 +52,6 @@ public class PurchaseItem {
 
     @Override
     public String toString(){
-        return String.format("id: %s, product: %s, rating: %.2f, weight: %.2f KG, quantity: %d, total price: %.2f EUR",id, product.getName(), product.getRating(), product.getWeight(), quantity, totalPrice);
+        return String.format("Product: %s, Total quantity: %d, Total price: %.2f EUR", product.toString(), quantity, totalPrice);
     }
 }

@@ -19,25 +19,25 @@ public class CreditCard {
     @Id @GeneratedValue(strategy = GenerationType.UUID) @Getter
     private UUID cardId;
 
-    @NotNull(message = "user ID cannot be null") @Getter @Setter
+    @NotNull(message = "User ID cannot be null") @Getter @Setter
     private UUID userId;
 
-    @NotNull(message = "number cannot be null") @Getter @Setter
-    @Pattern(regexp = "^[0-9]{16}$", message = "number must be exactly 16 digits")
-    @Size(min = 1, max = 50, message = "length of number must be 1-30") 
+    @NotNull(message = "Number cannot be null") @Getter @Setter
+    @Pattern(regexp = "^[0-9]{16}$", message = "Number must be exactly 16 digits")
+    @Size(min = 1, max = 50, message = "Length of number must be 1-30") 
     @Column(unique = true)
     private String number;
 
-    @NotNull(message = "type cannot be null") @Getter @Setter
-    @Size(min = 1, max = 50, message = "length of type must be 1-30") 
+    @NotNull(message = "Type cannot be null") @Getter @Setter
+    @Size(min = 1, max = 50, message = "Length of type must be 1-30") 
     private String type;
 
-    @NotNull(message = "expiration date cannot be null") @Getter @Setter
+    @NotNull(message = "Expiration date cannot be null") @Getter @Setter
     @Pattern(regexp = "^(0[1-9]|1[0-2])/[0-9]{2}$", message = "Expiration date must be in the format MM/yy")
     private String expirationDate;
 
     @Getter @Setter
-    @Min(value = 0, message = "money must be greater than or equal to 0")
+    @Min(value = 0, message = "Money must be greater than or equal to 0")
     private float money;
 
     protected CreditCard(){}
@@ -52,7 +52,7 @@ public class CreditCard {
 
     @Override
     public String toString(){
-        return String.format("Card ID: %s, User ID: %s, Number: %s, Type: %s, Expiration Date: %s, Money: %.2f", cardId, userId, number, type, expirationDate,money);
+        return String.format("Number: %s, Type: %s, Expiration Date: %s, Money: %.2f", number, type, expirationDate, money);
     }
 
     public void spendMoney(float amount){

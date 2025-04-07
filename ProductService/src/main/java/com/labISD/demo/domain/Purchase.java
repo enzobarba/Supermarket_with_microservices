@@ -16,6 +16,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -47,6 +48,9 @@ public class Purchase {
     @Getter
     private LocalDateTime createdAt;
 
+    @Getter @Setter
+    private LocalDateTime orderedAt;
+
     @Getter @Setter @NotNull(message = "total amount cannot be null") @Min(value = 0, message = "total amount cannot be less than 0")
     private float totalAmount;
 
@@ -56,6 +60,7 @@ public class Purchase {
         this.userId = userId;
         items = new ArrayList <>();
         totalAmount = 0;
+        orderedAt = null;
     }
 
     public void addItemToCart(Product product, int quantity){
@@ -100,6 +105,23 @@ public class Purchase {
 
     @Override
     public String toString(){
-        return items.toString();
+        if(this.isEmpty()){
+            return "Cart is empty";
+        }
+        String printPurchase = "";
+        if(status == ORDERSTATUS.ORDER){
+            printPurchase+= "Ordered at: "+orderedAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        }else{
+            printPurchase+= "Cart:";
+        }
+        printPurchase+= "\nCreated at: "+createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        printPurchase+= "\nProducts:";
+        for(int i = 0; i < items.size(); i++){
+            printPurchase+= String.format("\n%d) %s", (i+1), items.get(i).toString());
+        }
+        printPurchase+= "\nTotal amount: "+totalAmount;
+        printPurchase+= "\nOrder status: "+status.name();
+        
+        return printPurchase;
     }
 }

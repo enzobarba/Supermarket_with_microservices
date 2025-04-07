@@ -57,7 +57,7 @@ public class RestHelper {
             return "Authentication ERROR: token not valid";
         }
         if (!checkRequest(token, action)) {
-            return String.format("Authorization ERROR: [%s] operation NOT ALLOWED", action);
+            return String.format("Authorization ERROR: %s operation NOT ALLOWED", action);
         }
         return makeRequest(url, method, body, String.class, token);
     }

@@ -1,7 +1,9 @@
-package com.labISD.demo;
+package com.labISD.demo.repository;
 
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.labISD.demo.domain.Account;
 import com.labISD.demo.enums.ROLE;
 import java.util.List;
 

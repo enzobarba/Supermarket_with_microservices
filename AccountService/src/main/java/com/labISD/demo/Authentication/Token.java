@@ -1,4 +1,4 @@
-package com.labISD.demo.Authentication;
+package com.labISD.demo.authentication;
 
 import java.security.Signature;
 import java.time.Instant;

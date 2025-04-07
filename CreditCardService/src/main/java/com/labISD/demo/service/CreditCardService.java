@@ -29,8 +29,15 @@ public class CreditCardService {
         return "Credit card successfully added";
     }
 
+    public boolean cardExists(String number){
+        CreditCard creditCard = creditCardRepository.findByNumber(number);
+        if(creditCard == null){
+            return false;
+        }
+        return true;
+    }
+
     public boolean spendMoneyFromCard(PaymentDTO paymentDTO){
-        //check first if card exists (different method called by cartService)
         boolean canSpend = false;
         CreditCard creditCard = creditCardRepository.findByNumber(paymentDTO.cardNumber());
         if(creditCard.canSpendMoney(paymentDTO.amount())){
@@ -44,9 +51,13 @@ public class CreditCardService {
     public String getUserCards(UUID userId){
         List <CreditCard> creditCards = creditCardRepository.findByUserId(userId);
         if(creditCards.size() == 0){
-            return "no credit cards";
+            return "No credit cards";
         }
-        return creditCards.toString();
+        String printCards = "User cards:";
+        for(int i = 0; i < creditCards.size(); i++){
+            printCards+= String.format("\n%d) %s",(i+1),creditCards.get(i).toString());;
+        }
+        return printCards;
     }
 
     private boolean isValidExpirationDate(String expirationDate) {

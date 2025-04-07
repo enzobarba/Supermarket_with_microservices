@@ -30,4 +30,9 @@ public class CreditCardController {
     public boolean spendMoneyFromCard(@RequestBody PaymentDTO paymentDTO){
         return creditCardService.spendMoneyFromCard(paymentDTO);
     }
+
+    @PostMapping("/cardExists")
+    public boolean cardExists(@RequestBody String number){
+        return creditCardService.cardExists(number);
+    }
 }

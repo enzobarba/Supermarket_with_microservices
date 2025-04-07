@@ -1,4 +1,4 @@
-package com.labISD.demo.Authorization;
+package com.labISD.demo.authorization;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;

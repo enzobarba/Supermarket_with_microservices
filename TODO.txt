@@ -1,8 +1,6 @@
-- denie add product in cart if not quantity not actually available (even if when checkout there is a check for availability)
-- delete all old user Token when he make login
-- fix all entity print (not list, but String at the head)
+- fix all entity print (not list, but String and at the head)
 - catena Client-Server (test Junit senza interazione utente)
-- controlli chiamate, risposte ok/error, vincoli ridondanti da sistemare (@Validated in DTO?) (check email format in accountService, )
+- controlli chiamate, risposte ok/error, vincoli ridondanti da sistemare (@Validated in DTO?) (check email format in accountService)
 - in catena Client-Server ci va remote proxy? Guardare codici prof... in client mettere Proxy per controlli preliminari richieste?
 - gestione acquisti concorrenti (Transactional?)
 - DB per Service (controllare se va bene, dovrebbe)
