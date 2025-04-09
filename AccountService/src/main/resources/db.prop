@@ -34,4 +34,4 @@ role1.perms=3,4,5,7,8,9,10,11,12,13,14,15
 role2.name=supplier
 role2.perms=2,3,6
 role3.name=admin
-role3.perms=1,3,9
+role3.perms=1,3

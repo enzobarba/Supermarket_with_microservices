@@ -119,7 +119,7 @@ public class Purchase {
         for(int i = 0; i < items.size(); i++){
             printPurchase+= String.format("\n%d) %s", (i+1), items.get(i).toString());
         }
-        printPurchase+= "\nTotal amount: "+totalAmount;
+        printPurchase+= "\nTotal amount: "+totalAmount+" EUR";
         printPurchase+= "\nOrder status: "+status.name();
         
         return printPurchase;

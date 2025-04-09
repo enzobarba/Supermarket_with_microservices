@@ -1,4 +1,3 @@
-- fix all entity print (not list, but String and at the head)
 - catena Client-Server (test Junit senza interazione utente)
 - controlli chiamate, risposte ok/error, vincoli ridondanti da sistemare (@Validated in DTO?) (check email format in accountService)
 - in catena Client-Server ci va remote proxy? Guardare codici prof... in client mettere Proxy per controlli preliminari richieste?

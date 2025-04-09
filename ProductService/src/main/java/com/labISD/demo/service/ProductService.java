@@ -22,6 +22,7 @@ public class ProductService {
         if(productRepository.findByName(productDTO.name()) != null){
             return "Error: product already exists";
         }
+        //check quantity > 0
         productRepository.save(new Product(productDTO.name(), productDTO.price(), productDTO.quantityAvailable(), productDTO.weight(), productDTO.category()));
         return "Product successfully added";
     }

@@ -52,7 +52,7 @@ public class CreditCard {
 
     @Override
     public String toString(){
-        return String.format("Number: %s, Type: %s, Expiration Date: %s, Money: %.2f", number, type, expirationDate, money);
+        return String.format("Number: %s, Type: %s, Expiration Date: %s, Money: %.2f EUR", number, type, expirationDate, money);
     }
 
     public void spendMoney(float amount){

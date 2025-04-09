@@ -6,72 +6,77 @@ import com.labISD.demo.enums.*;
 
 public class ClientApplication {
 
-    private ClientDispatcher clientDispatcher;
+    private ClientFacade clientFacade;
 
     public ClientApplication(){
-        this.clientDispatcher = new ClientDispatcher();
+        this.clientFacade = new ClientFacade();
     }
 
     public static void main(String[] args) {
         ClientApplication client = new ClientApplication();
 
-        System.out.println(client.clientDispatcher.request(REQUEST_TYPE.REGISTER_ACCOUNT, 
-        new NewAccountDTO("enzo2709", "adSss23!", "enzo1334@gmail.com", "Enzo", "Barba", null), null, null));
+        client.clientFacade.populateAccounts();
 
-        System.out.println(client.clientDispatcher.request(REQUEST_TYPE.REGISTER_ACCOUNT, 
-        new NewAccountDTO("enzoSuppl", "adSss23!", "enzo1335@gmail.com", "Enzo", "Barba", "SUPPLIER"), null, null));
+        client.clientFacade.populateAccountsWithErrors();
 
-        System.out.println(client.clientDispatcher.request(REQUEST_TYPE.REGISTER_ACCOUNT, 
-        new NewAccountDTO("enzoAdmin", "adSss23!", "enzo1336@gmail.com", "Enzo", "Barba", "ADMIN"), null, null));
+        //error login: username not valid
+        String purchaserToken = client.clientFacade.request(REQUEST_TYPE.LOGIN, "enzo270",
+                        new LoginDTO("enzo270","Ids2025!"), null, null);
 
-        String tokenP = client.clientDispatcher.request(REQUEST_TYPE.LOGIN, 
-                        new LoginDTO("enzo2709","adSss23!"), null, null);
+        //error login: password not valid
+        purchaserToken = client.clientFacade.request(REQUEST_TYPE.LOGIN, "enzo2709",
+                        new LoginDTO("enzo2709","Ids2025"), null, null);
 
-        String tokenS = client.clientDispatcher.request(REQUEST_TYPE.LOGIN, 
-                        new LoginDTO("enzoSuppl","adSss23!"), null, null);
+        purchaserToken = client.clientFacade.request(REQUEST_TYPE.LOGIN, "enzo2709",
+                        new LoginDTO("enzo2709","Ids2025!"), null, null);
+
+        String supplierToken = client.clientFacade.request(REQUEST_TYPE.LOGIN, "aMidolo",
+                        new LoginDTO("aMidolo","Ids2025!"), null, null);
         
-        String tokenA = client.clientDispatcher.request(REQUEST_TYPE.LOGIN, 
-                        new LoginDTO("enzoAdmin","adSss23!"), null, null);
+        String adminToken = client.clientFacade.request(REQUEST_TYPE.LOGIN, "eTramontana",
+                        new LoginDTO("eTramontana","Ids2025!"), null, null);
         
-        System.out.println(client.clientDispatcher.request(REQUEST_TYPE.ADD_PRODUCT,
-                        new NewProductDTO("spaghetti",1,20,2,CATEGORY.Pasta), tokenS, null));
+        client.clientFacade.request(REQUEST_TYPE.GET_ALL_ACCOUNTS, "eTramontana", null, adminToken, null);
+
+        client.clientFacade.getAllAccountsWithErrors(purchaserToken, supplierToken);
+
+        client.clientFacade.populateProducts(supplierToken);
+
+        client.clientFacade.populateProductsWithErrors(adminToken, purchaserToken, supplierToken);
         
-        System.out.println(client.clientDispatcher.request(REQUEST_TYPE.SUPPLY_PRODUCT,
-                        new SupplyProductDTO("spaghetti",30), tokenS, null));
+        //client.clientFacade.request(REQUEST_TYPE.SUPPLY_PRODUCT, "aMidolo",
+          //              new SupplyProductDTO("spaghetti",30), supplierToken, null);
 
-        System.out.println(client.clientDispatcher.request(REQUEST_TYPE.ADD_PRODUCT,
-                        new NewProductDTO("fusilli",1,20,2,CATEGORY.Pasta), tokenS, null));
+        client.clientFacade.request(REQUEST_TYPE.GET_ALL_PRODUCTS, "enzo2709",
+                        null, purchaserToken, null);
+
+        client.clientFacade.request(REQUEST_TYPE.GET_PRODUCTS_BY_CATEGORY, "enzo2709",
+                        null, purchaserToken, CATEGORY.Pasta.name());
+
+        //CHECK BELOW
+        client.clientFacade.request(REQUEST_TYPE.ADD_ITEM_TO_CART, "enzo2709",
+                        new NewCartItemDTO("gamberoni",11), purchaserToken, null);
+
+        client.clientFacade.request(REQUEST_TYPE.ADD_ITEM_TO_CART, "enzo2709",
+                        new NewCartItemDTO("gamberoni",11), purchaserToken, null);
+
+        client.clientFacade.request(REQUEST_TYPE.GET_CART, "enzo2709",
+                        null, purchaserToken, null);
+
+        client.clientFacade.request(REQUEST_TYPE.ADD_CARD_TO_ACCOUNT, "enzo2709",
+                        new NewCreditCardDTO("1111000011110000", "MASTERCARD","03/29",100), purchaserToken, null);
+
+        client.clientFacade.request(REQUEST_TYPE.CHECKOUT, "enzo2709",
+                        "1111000011110000", purchaserToken, null);
+
+        client.clientFacade.request(REQUEST_TYPE.GET_CART, "enzo2709",
+                        null, purchaserToken, null);
         
-        System.out.println(client.clientDispatcher.request(REQUEST_TYPE.ADD_PRODUCT,
-                        new NewProductDTO("gamberoni",1,20,2,CATEGORY.Frozen), tokenS, null));
+        client.clientFacade.request(REQUEST_TYPE.GET_ALL_PRODUCTS, "enzo2709",
+                        null, purchaserToken, null);
 
-        System.out.println(client.clientDispatcher.request(REQUEST_TYPE.GET_ALL_PRODUCTS,
-                        null, tokenP, null));
+        client.clientFacade.request(REQUEST_TYPE.GET_USER_CARDS, "enzo2709",
+                        null, purchaserToken, null);
 
-        System.out.println(client.clientDispatcher.request(REQUEST_TYPE.ADD_ITEM_TO_CART,
-                        new NewCartItemDTO("gamberoni",11), tokenP, null));
-
-        System.out.println(client.clientDispatcher.request(REQUEST_TYPE.ADD_ITEM_TO_CART,
-                        new NewCartItemDTO("gamberoni",11), tokenP, null));
-
-        System.out.println(client.clientDispatcher.request(REQUEST_TYPE.GET_CART,
-                        null, tokenP, null));
-
-        System.out.println(client.clientDispatcher.request(REQUEST_TYPE.ADD_CARD_TO_ACCOUNT,
-                        new NewCreditCardDTO("1111000011110000", "MASTERCARD","03/29",100), tokenP, null));
-
-        System.out.println(client.clientDispatcher.request(REQUEST_TYPE.CHECKOUT,
-                        "1111000011110000", tokenP, null));
-
-        System.out.println(client.clientDispatcher.request(REQUEST_TYPE.GET_CART,
-                        null, tokenP, null));
-        
-        System.out.println(client.clientDispatcher.request(REQUEST_TYPE.GET_ALL_PRODUCTS,
-                        null, tokenP, null));
-
-        System.out.println(client.clientDispatcher.request(REQUEST_TYPE.GET_USER_CARDS,
-                        null, tokenP, null));
-
-        System.out.println(client.clientDispatcher.request(REQUEST_TYPE.GET_ALL_ACCOUNTS, null, tokenA, null));
     }
 }
