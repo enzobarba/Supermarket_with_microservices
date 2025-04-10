@@ -9,5 +9,6 @@ public interface CreditCardRepository extends JpaRepository <CreditCard, UUID>{
     
     public List <CreditCard> findByUserId(UUID userId);
     public CreditCard findByNumber(String number);
+    public CreditCard findByNumberAndUserId(String number, UUID userId);
 
 }

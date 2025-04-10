@@ -1,6 +1,7 @@
 package com.labISD.demo;
 
 import com.labISD.demo.dto.NewAccountDTO;
+import com.labISD.demo.dto.NewCartItemDTO;
 import com.labISD.demo.dto.NewProductDTO;
 import com.labISD.demo.enums.CATEGORY;
 import com.labISD.demo.enums.REQUEST_TYPE;
@@ -38,6 +39,10 @@ public class ClientFacade {
     public void populateAccounts(){
         request(REQUEST_TYPE.REGISTER_ACCOUNT, "enzo2709", 
                 new NewAccountDTO("enzo2709", "Ids2025!", "enzo1334@gmail.com", "Enzo",
+                "Barba", null), null, null);
+
+        request(REQUEST_TYPE.REGISTER_ACCOUNT, "vincenzo2000", 
+                new NewAccountDTO("vincenzo2000", "Ids2025!", "vincenzo1334@gmail.com", "Vincenzo",
                 "Barba", null), null, null);
 
         request(REQUEST_TYPE.REGISTER_ACCOUNT, "aMidolo",
@@ -119,6 +124,24 @@ public class ClientFacade {
         //product already exists
         request(REQUEST_TYPE.ADD_PRODUCT, "aMidolo",
                 new NewProductDTO("rucola",1.50f,5,0.4f,CATEGORY.Vegetables), supplierToken, null);
+
+    }
+
+
+    public void populateCart(String purchaserToken){
+
+        request(REQUEST_TYPE.ADD_ITEM_TO_CART, "enzo2709",
+                new NewCartItemDTO("spaghetti",5), purchaserToken, null);
+
+        request(REQUEST_TYPE.ADD_ITEM_TO_CART, "enzo2709",
+                new NewCartItemDTO("rucola",3), purchaserToken, null);
+
+        //quantity not available
+        request(REQUEST_TYPE.ADD_ITEM_TO_CART, "enzo2709",
+                new NewCartItemDTO("gamberoni",10), purchaserToken, null);
+
+        request(REQUEST_TYPE.ADD_ITEM_TO_CART, "enzo2709",
+                new NewCartItemDTO("tovaglioli",10), purchaserToken, null);
 
     }
 

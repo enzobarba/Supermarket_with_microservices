@@ -37,15 +37,17 @@ public class CreditCardService {
         return true;
     }
 
-    public boolean spendMoneyFromCard(PaymentDTO paymentDTO){
-        boolean canSpend = false;
-        CreditCard creditCard = creditCardRepository.findByNumber(paymentDTO.cardNumber());
-        if(creditCard.canSpendMoney(paymentDTO.amount())){
-            creditCard.spendMoney(paymentDTO.amount());
-            canSpend = true;
-            creditCardRepository.save(creditCard);
+    public String spendMoneyFromCard(PaymentDTO paymentDTO){
+        CreditCard creditCard = creditCardRepository.findByNumberAndUserId(paymentDTO.cardNumber(), paymentDTO.userId());
+        if(creditCard == null){
+            return "ERROR: credit card not found";
         }
-        return canSpend;
+        else if(!creditCard.canSpendMoney(paymentDTO.amount())){
+            return "ERROR: not enough money on card";
+        }
+        creditCard.spendMoney(paymentDTO.amount());
+        creditCardRepository.save(creditCard);
+        return "OK";
     }
 
     public String getUserCards(UUID userId){

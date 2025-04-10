@@ -8,6 +8,7 @@ import com.labISD.demo.dto.*;
 import com.labISD.demo.enums.ORDERSTATUS;
 import com.labISD.demo.repository.PurchaseRepository;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -29,7 +30,12 @@ public class PurchaseService {
     }
 
     public String getOrders(UUID userId){
-        return purchaseRepository.findByUserIdAndStatus(userId, ORDERSTATUS.ORDER).toString();
+        List <Purchase> orders =  purchaseRepository.findByUserIdAndStatus(userId, ORDERSTATUS.ORDER);
+        String toPrint = "";
+        for (int i = 0; i < orders.size(); i++){
+            toPrint+= String.format("ORDER %d:\n%s",(i+1),orders.get(i).toString());
+        }
+        return toPrint;
     }
     
     public void createCart(UUID userId) {
@@ -87,13 +93,9 @@ public class PurchaseService {
         if(!productsAvailable){
             return "ERROR: quantities not available";
         }
-        boolean cardExists = cardExists(cardNumber);
-        if(!cardExists){
-            return "ERROR: credit card not valid";
-        }
-        boolean canSpend = pay(new PaymentDTO(cardNumber, cart.getTotalAmount()));
-        if(!canSpend){
-            return "ERROR: not enough money on credit card";
+        String canSpend = pay(new PaymentDTO(userId, cardNumber, cart.getTotalAmount()));
+        if(!canSpend.equals("OK")){
+            return canSpend;
         }
         decreaseProductsQuantity(cart);
         cart.setStatus(ORDERSTATUS.ORDER);
@@ -114,18 +116,12 @@ public class PurchaseService {
         cart.getItems().forEach(item -> productService.saveProduct(item.getProduct()));
     }
 
-    private boolean pay(PaymentDTO paymentDTO) {
+    public String pay(PaymentDTO paymentDTO) {
         return webClientBuilder.build()
             .post().uri("http://creditCard:9092/spendMoneyFromCard")
             .bodyValue(paymentDTO)
-            .retrieve().bodyToMono(Boolean.class).block(); 
+            .retrieve().bodyToMono(String.class).block(); 
     }
 
-    private boolean cardExists(String number) {
-        return webClientBuilder.build()
-            .post().uri("http://creditCard:9092/cardExists")
-            .bodyValue(number)
-            .retrieve().bodyToMono(Boolean.class).block(); 
-    }
 
 }
