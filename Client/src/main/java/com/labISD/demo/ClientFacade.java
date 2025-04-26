@@ -16,18 +16,18 @@ public class ClientFacade {
 
     public <T,R> String request(REQUEST_TYPE requestType, String user, T body, String token, String param){
         String response = clientSender.request(requestType, body, token, param);
-        /*try {
+        try {
             Thread.sleep(2000); 
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }*/
+        }
         String requestToPrint = String.format("User [%s]       Request [%s]", user, requestType.name());
         System.out.println(requestToPrint);
-        /*try {
+        try {
             Thread.sleep(2000); 
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }*/
+        }
         String responseToPrint = String.format("Server response: \n%s\n\n", response);
         System.out.print(responseToPrint);
         if(requestType == REQUEST_TYPE.LOGIN){
